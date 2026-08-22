@@ -1,0 +1,45 @@
+enable: true
+bootstrap:
+  key: "sunenchants:critical"
+  description: "Критический"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Критический {level}"
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - IRON_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+max_level: 2
+levels:
+  1:
+    chances:
+      table_enchant: 0
+      work: 20
+    sounds:
+      alone: "ITEM_SHIELD_BLOCK"
+      around: "ITEM_SHIELD_BLOCK"
+    value: 10
+  2:
+    chances:
+      table_enchant: 0
+      work: 20
+    sounds:
+      alone: "ITEM_SHIELD_BLOCK"
+      around: "ITEM_SHIELD_BLOCK"
+    value: 15

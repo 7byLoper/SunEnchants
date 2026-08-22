@@ -1,0 +1,40 @@
+enable: true
+bootstrap:
+  key: "sunenchants:stunning"
+  description: "Оглушение"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: '&7Оглушение {level}'
+cursed: false
+target:
+  - BOW
+  - CROSSBOW
+max_level: 2
+levels:
+  1:
+    chances:
+      table_enchant: 3
+      work: 3
+    value:
+      - "SLOW;4;2"
+      - "BLINDNESS;4;2"
+    sounds:
+      alone: ""
+      around: ""
+  2:
+    chances:
+      table_enchant: 1
+      work: 5
+    value:
+      - "SLOW;4;2"
+      - "BLINDNESS;4;2"
+    sounds:
+      alone: ""
+      around: ""

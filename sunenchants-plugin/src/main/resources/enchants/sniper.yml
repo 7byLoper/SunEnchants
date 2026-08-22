@@ -1,0 +1,37 @@
+enable: true
+bootstrap:
+  key: "sunenchants:sniper"
+  description: "Снайпер"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Снайпер {level}"
+cursed: false
+target:
+  - BOW
+max_level: 2
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    velocity_multiplier: 1.2
+    max_velocity: 8.0
+  2:
+    chances:
+      table_enchant: 2
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    velocity_multiplier: 1.4
+    max_velocity: 8.0

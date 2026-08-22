@@ -1,0 +1,6 @@
+rootProject.name = 'SunEnchants'
+
+include 'sunenchants-api'
+include 'sunenchants-plugin'
+include 'sunenchants-legacy'
+include 'sunenchants-modern'

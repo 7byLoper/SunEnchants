@@ -1,0 +1,41 @@
+enable: true
+bootstrap:
+  key: "sunenchants:attraction"
+  description: "Притяжение"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Притяжение {level}"
+cursed: false
+target:
+  - TRIDENT
+max_level: 2
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    force: 1.0
+    max_velocity: 2.5
+    vertical_multiplier: 0.8
+    max_distance: 24.0
+  2:
+    chances:
+      table_enchant: 2
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    force: 1.4
+    max_velocity: 3.0
+    vertical_multiplier: 0.9
+    max_distance: 32.0

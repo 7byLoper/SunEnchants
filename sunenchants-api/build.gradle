@@ -1,0 +1,26 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'ru.loper.sunenchants'
+version = rootProject.version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:${rootProject.ext.versions.paperModern}"
+    compileOnly "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
+
+    compileOnly "com.github.7byloper.suncore-recode:core:1.0.8-RELEASE"
+}

@@ -1,0 +1,46 @@
+enable: true
+bootstrap:
+  key: "sunenchants:stealer"
+  description: "Вор"
+  max-level: 1
+  weight: 5
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Вор {level}"
+cursed: false
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - IRON_SWORD
+  - GOLDEN_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - WOODEN_AXE
+  - STONE_AXE
+  - IRON_AXE
+  - GOLDEN_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+max_level: 1
+
+max-money: 45000.0
+
+messages:
+  killer: '<#00FF00>[✓] <reset>%theme_color-3%Вы украли <reset>%theme_color-2%{money}$ <reset>%theme_color-3%у игрока <reset>%theme_color-2%{victim}<reset>%theme_color-3%.<reset>'
+  victim: '%theme_color-1%[⚠] <reset>%theme_color-3%Игрок <reset>%theme_color-2%{killer} <reset>%theme_color-3%украл у вас <reset>%theme_color-2%{money}$<reset>%theme_color-3%.<reset>'
+  vault-missing: '%theme_color-1%[✘] <reset>%theme_color-3%Экономика недоступна, зачарование «Вор» не сработало.<reset>'
+
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 10.0

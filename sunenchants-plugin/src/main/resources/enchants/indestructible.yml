@@ -1,0 +1,54 @@
+enable: true
+bootstrap:
+  key: "sunenchants:indestructible"
+  description: "Неразрушимость"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: '&7Неразрушимость {level}'
+warning:
+  message: '%theme_color-1%[⚠] <reset>%theme_color-3%У предмета осталось меньше <reset>%theme_color-2%10<reset>%theme_color-3% прочности.<reset>'
+  #title: 'Предмет скоро сломается;использование заблокировано'
+cursed: false
+target:
+  - NETHERITE_SWORD
+  - DIAMOND_SWORD
+  - IRON_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - WOODEN_SWORD
+  - NETHERITE_AXE
+  - DIAMOND_AXE
+  - IRON_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - WOODEN_AXE
+  - NETHERITE_PICKAXE
+  - DIAMOND_PICKAXE
+  - IRON_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - WOODEN_PICKAXE
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+  - DIAMOND_SHOVEL
+  - NETHERITE_SHOVEL
+max_level: 1
+levels:
+  1:
+    chances:
+      table_enchant: 3
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

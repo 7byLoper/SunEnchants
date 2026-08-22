@@ -1,0 +1,7 @@
+archivesBaseName = 'sunenchants-modern'
+
+dependencies {
+    implementation project(':sunenchants-api')
+
+    compileOnly "io.papermc.paper:paper-api:${rootProject.ext.versions.paperModern}"
+}

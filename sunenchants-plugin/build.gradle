@@ -1,0 +1,51 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+archivesBaseName = 'SunEnchants'
+
+dependencies {
+    implementation project(':sunenchants-api')
+    implementation project(':sunenchants-legacy')
+    implementation project(':sunenchants-modern')
+
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+
+    compileOnly "com.github.7byloper.suncore-recode:core:1.0.8-RELEASE"
+    compileOnly "com.github.7byLoper.SunCore-recode:component-api:${rootProject.ext.versions.suncore}"
+
+    implementation "org.reflections:reflections:${rootProject.ext.versions.reflections}"
+
+    compileOnly "org.bstats:bstats-bukkit:${rootProject.ext.versions.bstats}"
+    compileOnly "com.sk89q.worldedit:worldedit-core:${rootProject.ext.versions.worldedit}"
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4") {
+        exclude group: "org.spigotmc", module: "spigot-api"
+        exclude group: "com.destroystokyo.paper", module: "paper-api"
+        exclude group: "io.papermc.paper", module: "paper-api"
+    }
+    compileOnly "me.clip:placeholderapi:${rootProject.ext.versions.placeholderapi}"
+
+    compileOnly fileTree(dir: '../libs', include: ['*.jar'])
+}
+
+tasks.processResources {
+    filesMatching(['plugin.yml', 'paper-plugin.yml']) {
+        expand(
+                version: project.version
+        )
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+
+    manifest {
+        attributes(
+                'paperweight-mappings-namespace': 'mojang'
+        )
+    }
+}
+
+build {
+    dependsOn shadowJar
+}

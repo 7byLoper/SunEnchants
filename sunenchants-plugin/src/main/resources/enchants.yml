@@ -1,0 +1,55 @@
+debug: false
+
+migration:
+  legacy_lore:
+    enabled: true
+    remove_on_modern: true
+    join_delay_ticks: 20
+
+# Точный whitelist включённых чаров.
+# Удали ID из списка, чтобы отключить чар глобально. Отсутствующие ID автоматически не добавляются.
+# Либо оставь ID здесь и поставь enable: false в enchants/<id>.yml.
+enchants:
+  # FT
+  - poison
+  - vampirism
+  - oxidation
+  - demolition
+  - detection
+  - sniper
+  - stupor
+  - scout
+  - attraction
+  - returning
+  - pinger
+  - web
+  - jumper
+
+  # Common (FT / HW)
+  - exp_boost
+  - bulldozer
+  - magnet
+  - melting
+  - bulldozer_log
+  - lava_move
+
+  # HW
+  - filter
+  - stunning
+  - auto_aim
+  - indestructible
+  - sowing
+  - delicate
+  - destroyer
+  - critical
+  - fermer
+  - wrecker
+  - rich
+  - impenetrable
+  - farmer
+  - mega_bulldozer
+
+  # RW
+  - lightner
+  - stealer
+  - wisdom

@@ -1,0 +1,29 @@
+enable: true
+bootstrap:
+  key: "sunenchants:returning"
+  description: "Возвращение"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Возвращение {level}"
+cursed: false
+target:
+  - TRIDENT
+max_level: 1
+full_inventory: DROP_NEAR_OWNER
+allow_creative: false
+allow_adventure: false
+levels:
+  1:
+    chances:
+      table_enchant: 4
+      work: 25
+    sounds:
+      alone: ""
+      around: ""

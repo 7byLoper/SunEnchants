@@ -1,0 +1,45 @@
+enable: true
+bootstrap:
+  key: "sunenchants:web"
+  description: "Паутина"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Паутина {level}"
+cursed: false
+target:
+  - WOODEN_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - IRON_PICKAXE
+  - DIAMOND_PICKAXE
+  - NETHERITE_PICKAXE
+max_level: 1
+max_blocks: 32
+neighbor_mode: FACES
+durability_per_block: 1
+allow_creative: false
+allow_adventure: false
+block_filter:
+  blacklist:
+    - BEDROCK
+    - BARRIER
+  default:
+    mode: WHITELIST
+    blocks:
+      - "*_ORE"
+      - ANCIENT_DEBRIS
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

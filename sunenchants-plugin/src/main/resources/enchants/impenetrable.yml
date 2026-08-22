@@ -1,0 +1,47 @@
+enable: true
+bootstrap:
+  key: "sunenchants:impenetrable"
+  description: "Непробиваемый"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: '&7Непробиваемый {level}'
+cursed: false
+target:
+  - GOLDEN_HELMET
+  - NETHERITE_HELMET
+  - NETHERITE_LEGGINGS
+  - NETHERITE_BOOTS
+  - NETHERITE_CHESTPLATE
+  - DIAMOND_HELMET
+  - DIAMOND_LEGGINGS
+  - DIAMOND_BOOTS
+  - DIAMOND_CHESTPLATE
+  - IRON_HELMET
+  - IRON_LEGGINGS
+  - IRON_BOOTS
+  - IRON_CHESTPLATE
+max_level: 1
+levels:
+  1:
+    chances:
+      table_enchant: 3
+      work: 5
+    sounds:
+      alone: ""
+      around: ""
+    value: 20
+  2:
+    chances:
+      table_enchant: 0
+      work: 5
+    sounds:
+      alone: ""
+      around: ""
+    value: 35

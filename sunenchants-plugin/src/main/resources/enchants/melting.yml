@@ -1,0 +1,92 @@
+enable: true
+_config_version: 2
+_migration_force:
+  - bootstrap.description
+  - display_name
+  - target
+
+bootstrap:
+  key: "sunenchants:melting"
+  description: "Авто-Плавка"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Авто-Плавка {level}"
+cursed: false
+silk_touch: SKIP
+replace:
+  # Камни и минералы
+  COBBLESTONE: STONE
+  SANDSTONE: SMOOTH_SANDSTONE
+  RED_SANDSTONE: SMOOTH_RED_SANDSTONE
+  QUARTZ_BLOCK: SMOOTH_QUARTZ
+  CLAY: TERRACOTTA
+  NETHERRACK: NETHER_BRICK
+  SAND: GLASS
+  RED_SAND: GLASS
+  CLAY_BALL: BRICK
+  ANCIENT_DEBRIS: NETHERITE_SCRAP
+  COBBLED_DEEPSLATE: DEEPSLATE
+
+  # Руды
+  IRON_ORE: IRON_INGOT
+  DEEPSLATE_IRON_ORE: IRON_INGOT
+  RAW_IRON: IRON_INGOT
+  GOLD_ORE: GOLD_INGOT
+  DEEPSLATE_GOLD_ORE: GOLD_INGOT
+  RAW_GOLD: GOLD_INGOT
+  COPPER_ORE: COPPER_INGOT
+  DEEPSLATE_COPPER_ORE: COPPER_INGOT
+  RAW_COPPER: COPPER_INGOT
+  DIAMOND_ORE: DIAMOND
+  DEEPSLATE_DIAMOND_ORE: DIAMOND
+  EMERALD_ORE: EMERALD
+  DEEPSLATE_EMERALD_ORE: EMERALD
+  COAL_ORE: COAL
+  DEEPSLATE_COAL_ORE: COAL
+  LAPIS_ORE: LAPIS_LAZULI
+  DEEPSLATE_LAPIS_ORE: LAPIS_LAZULI
+  REDSTONE_ORE: REDSTONE
+  DEEPSLATE_REDSTONE_ORE: REDSTONE
+  NETHER_GOLD_ORE: GOLD_INGOT
+  NETHER_QUARTZ_ORE: QUARTZ
+target:
+  - WOODEN_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - IRON_PICKAXE
+  - DIAMOND_PICKAXE
+  - NETHERITE_PICKAXE
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+  - WOODEN_SHOVEL
+  - STONE_SHOVEL
+  - GOLDEN_SHOVEL
+  - IRON_SHOVEL
+  - DIAMOND_SHOVEL
+  - NETHERITE_SHOVEL
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+max_level: 1
+levels:
+  1:
+    chances:
+      table_enchant: 10
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

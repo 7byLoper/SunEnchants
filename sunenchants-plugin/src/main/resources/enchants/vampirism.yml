@@ -1,0 +1,45 @@
+enable: true
+bootstrap:
+  key: "sunenchants:vampirism"
+  description: "Вампиризм"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Вампиризм {level}"
+cursed: false
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - IRON_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - TRIDENT
+max_level: 2
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 10
+    sounds:
+      alone: ""
+      around: ""
+    duration_ticks: 40
+    amplifier: 0
+    cooldown_ms: 1500
+  2:
+    chances:
+      table_enchant: 2
+      work: 18
+    sounds:
+      alone: ""
+      around: ""
+    duration_ticks: 60
+    amplifier: 0
+    cooldown_ms: 1200

@@ -1,0 +1,49 @@
+enable: true
+bootstrap:
+  key: "sunenchants:detection"
+  description: "Детекция"
+  max-level: 3
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Детекция {level}"
+cursed: false
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - IRON_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - TRIDENT
+max_level: 3
+levels:
+  1:
+    chances:
+      table_enchant: 6
+      work: 15
+    sounds:
+      alone: ""
+      around: ""
+    duration_ticks: 60
+  2:
+    chances:
+      table_enchant: 4
+      work: 22
+    sounds:
+      alone: ""
+      around: ""
+    duration_ticks: 100
+  3:
+    chances:
+      table_enchant: 2
+      work: 30
+    sounds:
+      alone: ""
+      around: ""
+    duration_ticks: 140

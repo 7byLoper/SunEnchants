@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+ext.versions = [
+        paperLegacy   : '1.16.5-R0.1-SNAPSHOT',
+        paperModern   : '1.21.11-R0.1-SNAPSHOT',
+        lombok        : '1.18.38',
+        reflections   : '0.10.2',
+        bstats        : '1.7',
+        worldedit     : '7.2.17',
+        worldguard    : '7.0.4',
+        placeholderapi: '2.11.6',
+        suncore       : '1.0.8-RELEASE'
+]
+
+allprojects {
+    group = 'ru.loper.sunenchants'
+    version = '2.2.0-RELEASE'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://repo.codemc.io/repository/maven-public/' }
+        maven { url = 'https://jitpack.io' }
+        maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+        maven { url = 'https://maven.enginehub.org/repo/' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 21
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
+        annotationProcessor "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
+    }
+}

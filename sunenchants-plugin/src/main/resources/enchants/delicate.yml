@@ -1,0 +1,45 @@
+enable: true
+bootstrap:
+  key: "sunenchants:delicate"
+  description: "Деликатный"
+  max-level: 3
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: '&7Деликатный {level}'
+cursed: false
+target:
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+max_level: 3
+levels:
+  1:
+    chances:
+      table_enchant: 4
+      work: 35
+    sounds:
+      alone: ""
+      around: ""
+  2:
+    chances:
+      table_enchant: 3
+      work: 65
+    sounds:
+      alone: ""
+      around: ""
+  3:
+    chances:
+      table_enchant: 2
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

@@ -1,0 +1,42 @@
+name: SunEnchants
+version: '${version}'
+main: ru.loper.sunenchants.SunEnchants
+bootstrapper: ru.loper.sunenchants.bootstrap.SunEnchantsBootstrap
+
+api-version: '1.21'
+
+author: Loper
+website: 'https://t.me/bysundev'
+
+dependencies:
+  bootstrap:
+    SunCore:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+  server:
+    SunCore:
+      load: BEFORE
+      required: true
+      join-classpath: true
+
+    SunGrindStone:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+    SunMobMoney:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+    SunHolyBossEvent:
+      load: BEFORE
+      required: false
+      join-classpath: true
+
+    SunAutoMine:
+      load: BEFORE
+      required: false
+      join-classpath: true

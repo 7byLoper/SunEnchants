@@ -1,0 +1,105 @@
+enable: true
+_config_version: 2
+_migration_force:
+  - bootstrap.description
+  - display_name
+  - target
+
+bootstrap:
+  key: "sunenchants:bulldozer"
+  description: "Бульдозер"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Бульдозер {level}"
+cursed: false
+target:
+  - WOODEN_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - IRON_PICKAXE
+  - DIAMOND_PICKAXE
+  - NETHERITE_PICKAXE
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+  - WOODEN_SHOVEL
+  - STONE_SHOVEL
+  - GOLDEN_SHOVEL
+  - IRON_SHOVEL
+  - DIAMOND_SHOVEL
+  - NETHERITE_SHOVEL
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+max_level: 2
+on_message: '<#00FF00>[✓] <reset>%theme_color-3%Мега-бульдозер включён.<reset>'
+off_message: '%theme_color-1%[✘] <reset>%theme_color-3%Мега-бульдозер выключен.<reset>'
+allow_creative: false
+allow_adventure: false
+
+# ALL = ломает любой блок, кроме blacklist.
+# EFFECTIVE = только блоки, для которых подходит тип инструмента.
+# WHITELIST = только blocks; поддерживаются маски вида *_ORE, OAK_*.
+block_filter:
+  blacklist:
+    - BEDROCK
+    - BARRIER
+    - END_PORTAL
+    - END_PORTAL_FRAME
+    - NETHER_PORTAL
+    - COMMAND_BLOCK
+    - CHAIN_COMMAND_BLOCK
+    - REPEATING_COMMAND_BLOCK
+    - STRUCTURE_BLOCK
+    - JIGSAW
+  default:
+    mode: ALL
+    blocks: []
+  pickaxe:
+    mode: ALL
+    blocks: []
+  axe:
+    mode: ALL
+    blocks: []
+  shovel:
+    mode: ALL
+    blocks: []
+  hoe:
+    mode: ALL
+    blocks: []
+levels:
+  1:
+    chances:
+      table_enchant: 4
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    shape: CUBE
+    radius: 1
+    max_blocks: 26
+    durability_per_block: 2
+  2:
+    chances:
+      table_enchant: 0
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    shape: CUBE
+    radius: 1
+    max_blocks: 26
+    durability_per_block: 1

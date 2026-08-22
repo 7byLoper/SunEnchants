@@ -1,0 +1,7 @@
+archivesBaseName = 'sunenchants-legacy'
+
+dependencies {
+    implementation project(':sunenchants-api')
+
+    compileOnly "com.destroystokyo.paper:paper-api:${rootProject.ext.versions.paperLegacy}"
+}

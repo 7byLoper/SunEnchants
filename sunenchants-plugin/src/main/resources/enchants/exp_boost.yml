@@ -1,0 +1,85 @@
+enable: true
+_config_version: 2
+_migration_force:
+  - target
+
+bootstrap:
+  key: "sunenchants:exp_boost"
+  description: "Опытный"
+  max-level: 3
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Опытный {level}"
+cursed: false
+target:
+  - WOODEN_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - IRON_PICKAXE
+  - DIAMOND_PICKAXE
+  - NETHERITE_PICKAXE
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+  - WOODEN_SHOVEL
+  - STONE_SHOVEL
+  - GOLDEN_SHOVEL
+  - IRON_SHOVEL
+  - DIAMOND_SHOVEL
+  - NETHERITE_SHOVEL
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - IRON_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - TRIDENT
+  - BOW
+  - CROSSBOW
+max_level: 3
+mining_blocks:
+  - "*_ORE"
+  - ANCIENT_DEBRIS
+levels:
+  1:
+    chances:
+      table_enchant: 10
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    mining_multiplier: 1.15
+    kill_multiplier: 1.10
+  2:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    mining_multiplier: 1.30
+    kill_multiplier: 1.20
+  3:
+    chances:
+      table_enchant: 3
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    mining_multiplier: 1.50
+    kill_multiplier: 1.30

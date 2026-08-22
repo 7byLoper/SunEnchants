@@ -1,0 +1,72 @@
+enable: true
+bootstrap:
+  key: "sunenchants:rich"
+  description: "Богач"
+  max-level: 5
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Богач {level}"
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - GOLDEN_SWORD
+  - IRON_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+max_level: 5
+levels:
+  1:
+    chances:
+      table_enchant: 3
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 40
+  2:
+    chances:
+      table_enchant: 2
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 80
+  3:
+    chances:
+      table_enchant: 1
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 120
+  4:
+    chances:
+      table_enchant: 0
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 160
+  5:
+    chances:
+      table_enchant: 0
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 200
+  6:
+    chances:
+      table_enchant: 0
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    combining: false
+    value: 240

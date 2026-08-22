@@ -1,0 +1,43 @@
+enable: true
+bootstrap:
+  key: "sunenchants:lightner"
+  description: "Подсветка"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Подсветка {level}"
+cursed: false
+target:
+  - WOODEN_SWORD
+  - STONE_SWORD
+  - IRON_SWORD
+  - GOLDEN_SWORD
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+  - WOODEN_AXE
+  - STONE_AXE
+  - IRON_AXE
+  - GOLDEN_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+max_level: 1
+
+# Время свечения в тиках: 200 = 10 секунд
+duration-ticks: 200
+amplifier: 1
+
+levels:
+  1:
+    chances:
+      table_enchant: 10
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    value: 1

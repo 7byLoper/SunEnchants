@@ -1,0 +1,65 @@
+enable: true
+_config_version: 2
+_migration_force:
+  - bootstrap.max-level
+  - max_level
+  - target
+_migration_remove:
+  - levels.3
+
+bootstrap:
+  key: "sunenchants:bulldozer_log"
+  description: "Дровосек"
+  max-level: 2
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Дровосек {level}"
+cursed: false
+target:
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+max_level: 2
+allow_creative: false
+allow_adventure: false
+block_filter:
+  blacklist:
+    - BEDROCK
+    - BARRIER
+  default:
+    mode: WHITELIST
+    blocks:
+      - "*_LOG"
+      - "*_WOOD"
+      - "*_STEM"
+      - "*_HYPHAE"
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    radius: 1
+    max_blocks: 8
+    durability_per_block: 2
+  2:
+    chances:
+      table_enchant: 2
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    radius: 1
+    max_blocks: 8
+    durability_per_block: 1

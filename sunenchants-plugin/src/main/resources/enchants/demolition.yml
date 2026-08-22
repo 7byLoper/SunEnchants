@@ -1,0 +1,37 @@
+enable: true
+bootstrap:
+  key: "sunenchants:demolition"
+  description: "Подрывник"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Подрывник {level}"
+cursed: false
+target:
+  - BOW
+  - TRIDENT
+max_level: 1
+levels:
+  1:
+    chances:
+      table_enchant: 3
+      work: 12
+    sounds:
+      alone: ""
+      around: ""
+    power: 1.0
+    radius: 4.0
+    damage: 6.0
+    knockback: 1.0
+    damage_owner: false
+    particle_count: 2
+    sound_volume: 1.0
+    sound_pitch: 1.0
+    minimum_vertical_knockback: 0.15
+    max_knockback_velocity: 4.0

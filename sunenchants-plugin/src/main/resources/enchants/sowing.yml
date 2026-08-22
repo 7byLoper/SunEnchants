@@ -1,0 +1,52 @@
+enable: true
+bootstrap:
+  key: "sunenchants:sowing"
+  description: "Посев"
+  max-level: 4
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: '&7Посев {level}'
+cursed: false
+target:
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+max_level: 4
+levels:
+  1:
+    chances:
+      table_enchant: 4
+      work: 25
+    sounds:
+      alone: ""
+      around: ""
+  2:
+    chances:
+      table_enchant: 3
+      work: 50
+    sounds:
+      alone: ""
+      around: ""
+  3:
+    chances:
+      table_enchant: 2
+      work: 75
+    sounds:
+      alone: ""
+      around: ""
+  4:
+    chances:
+      table_enchant: 1
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

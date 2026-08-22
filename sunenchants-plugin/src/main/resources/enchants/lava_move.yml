@@ -1,0 +1,47 @@
+enable: true
+_config_version: 2
+_migration_force:
+  - bootstrap.max-level
+  - max_level
+  - target
+_migration_remove:
+  - levels.2
+  - levels.3
+
+bootstrap:
+  key: "sunenchants:lava_move"
+  description: "Лаваход"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Лаваход {level}"
+cursed: false
+target:
+  - LEATHER_BOOTS
+  - CHAINMAIL_BOOTS
+  - IRON_BOOTS
+  - GOLDEN_BOOTS
+  - DIAMOND_BOOTS
+  - NETHERITE_BOOTS
+max_level: 1
+restore:
+  enabled: false
+  after_ticks: 100
+levels:
+  1:
+    chances:
+      table_enchant: 4
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    radius: 1
+    max_lava_level: 0
+    cooldown_ms: 150
+    durability_per_block: 0

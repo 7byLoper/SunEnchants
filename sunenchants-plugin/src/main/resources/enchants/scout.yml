@@ -1,0 +1,52 @@
+enable: true
+bootstrap:
+  key: "sunenchants:scout"
+  description: "Скаут"
+  max-level: 3
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Скаут {level}"
+cursed: false
+target:
+  - TRIDENT
+max_level: 3
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    force: 1.1
+    max_velocity: 2.5
+    vertical_component: 0.15
+    max_distance: 32.0
+  2:
+    chances:
+      table_enchant: 3
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    force: 1.4
+    max_velocity: 3.0
+    vertical_component: 0.2
+    max_distance: 40.0
+  3:
+    chances:
+      table_enchant: 1
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    force: 1.7
+    max_velocity: 3.5
+    vertical_component: 0.25
+    max_distance: 48.0

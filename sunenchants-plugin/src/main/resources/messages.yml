@@ -1,0 +1,25 @@
+no_permission: '<#FF0000>[✘] <reset>%theme_color-3%У вас нет прав на использование этой команды.<reset>'
+player_only: '%theme_color-1%[✘] <reset>%theme_color-3%Эта команда доступна только игрокам.<reset>'
+unknown_subcommand: '%theme_color-1%[⚠] <reset>%theme_color-3%Неизвестная подкоманда. Используйте <reset>%theme_color-2%/senchants<reset>%theme_color-3%.<reset>'
+admin_usage: |-
+  %theme_color-1%▶ %theme_color-2%SunEnchants
+  %theme_color-3%/senchants enchant <чар> <уровень> %theme_color-1%- наложить зачарование
+  %theme_color-3%/senchants givebook <игрок> <чар> <уровень> %theme_color-1%- выдать книгу
+  %theme_color-3%/senchants reload %theme_color-1%- перезагрузить конфиги
+enchant_usage: '%theme_color-1%[⚠] <reset>%theme_color-3%Использование: <reset>%theme_color-2%/senchants enchant <чар> <уровень><reset>'
+givebook_usage: '%theme_color-1%[⚠] <reset>%theme_color-3%Использование: <reset>%theme_color-2%/senchants givebook <игрок> <чар> <уровень><reset>'
+enchant_not_found: '%theme_color-1%[✘] <reset>%theme_color-3%Зачарование <reset>%theme_color-2%{enchant}<reset>%theme_color-3% не найдено. Доступно: <reset>%theme_color-2%{available}<reset>'
+enchant_level_required: '%theme_color-1%[⚠] <reset>%theme_color-3%Укажите уровень зачарования.<reset>'
+enchant_air: '%theme_color-1%[✘] <reset>%theme_color-3%Нельзя зачаровать воздух.<reset>'
+invalid_level: '%theme_color-1%[✘] <reset>%theme_color-3%Укажите корректный числовой уровень.<reset>'
+enchant_level_unavailable: '%theme_color-1%[✘] <reset>%theme_color-3%Уровень <reset>%theme_color-2%{level}<reset>%theme_color-3% недоступен для этого зачарования.<reset>'
+enchant_item_unsupported: '%theme_color-1%[✘] <reset>%theme_color-3%Этот предмет нельзя зачаровать данным зачарованием.<reset>'
+enchant_success: '<#00FF00>[✓] <reset>%theme_color-3%Зачарование <reset>%theme_color-2%{enchant} {level}<reset>%theme_color-3% успешно наложено.<reset>'
+player_offline: '%theme_color-1%[✘] <reset>%theme_color-3%Игрок <reset>%theme_color-2%{player}<reset>%theme_color-3% не найден или не в сети.<reset>'
+givebook_success: '<#00FF00>[✓] <reset>%theme_color-3%Игроку <reset>%theme_color-2%{player}<reset>%theme_color-3% выдана книга <reset>%theme_color-2%{enchant} {level}<reset>%theme_color-3%.<reset>'
+reload_success: '<#00FF00>[✓] <reset>%theme_color-3%Конфиги перезагружены за <reset>%theme_color-2%{time} мс<reset>%theme_color-3%.<reset>'
+reload_restart_required: '%theme_color-1%[⚠] <reset>%theme_color-3%Для полной синхронизации registry нужен рестарт: <reset>%theme_color-2%{enchants}<reset>'
+filter_item_on: '<#00FF00>[✓] <reset>%theme_color-3%Предмет <reset>%theme_color-2%{item}<reset>%theme_color-3% добавлен в фильтр.<reset>'
+filter_item_off: '<#00FF00>[✓] <reset>%theme_color-3%Предмет <reset>%theme_color-2%{item}<reset>%theme_color-3% удалён из фильтра.<reset>'
+filter_usage: '%theme_color-1%[⚠] <reset>%theme_color-3%Использование: <reset>%theme_color-2%/setfilter <предмет><reset>'
+filter_error_material: '%theme_color-1%[✘] <reset>%theme_color-3%Указанный материал не поддерживается.<reset>'

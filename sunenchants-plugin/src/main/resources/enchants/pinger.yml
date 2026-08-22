@@ -1,0 +1,54 @@
+enable: true
+bootstrap:
+  key: "sunenchants:pinger"
+  description: "Пингер"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Пингер {level}"
+cursed: false
+target:
+  - WOODEN_PICKAXE
+  - STONE_PICKAXE
+  - GOLDEN_PICKAXE
+  - IRON_PICKAXE
+  - DIAMOND_PICKAXE
+  - NETHERITE_PICKAXE
+  - WOODEN_AXE
+  - STONE_AXE
+  - GOLDEN_AXE
+  - IRON_AXE
+  - DIAMOND_AXE
+  - NETHERITE_AXE
+  - WOODEN_SHOVEL
+  - STONE_SHOVEL
+  - GOLDEN_SHOVEL
+  - IRON_SHOVEL
+  - DIAMOND_SHOVEL
+  - NETHERITE_SHOVEL
+  - WOODEN_HOE
+  - STONE_HOE
+  - GOLDEN_HOE
+  - IRON_HOE
+  - DIAMOND_HOE
+  - NETHERITE_HOE
+max_level: 1
+remaining_durability_threshold: 20
+sound: "block.note_block.pling"
+volume: 1.0
+pitch: 1.4
+cooldown_ms: 3000
+levels:
+  1:
+    chances:
+      table_enchant: 6
+      work: 100
+    sounds:
+      alone: ""
+      around: ""

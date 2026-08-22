@@ -1,0 +1,32 @@
+enable: true
+bootstrap:
+  key: "sunenchants:jumper"
+  description: "Попрыгун"
+  max-level: 1
+  weight: 10
+  min-cost:
+    base: 1
+    per-level-above-first: 10
+  max-cost:
+    base: 20
+    per-level-above-first: 10
+  active-slots: "ANY"
+display_name: "&7Попрыгун {level}"
+cursed: false
+target:
+  - LEATHER_BOOTS
+  - CHAINMAIL_BOOTS
+  - IRON_BOOTS
+  - GOLDEN_BOOTS
+  - DIAMOND_BOOTS
+  - NETHERITE_BOOTS
+max_level: 1
+levels:
+  1:
+    chances:
+      table_enchant: 5
+      work: 100
+    sounds:
+      alone: ""
+      around: ""
+    amplifier: 0

@@ -1,0 +1,17 @@
+name: SunEnchants
+main: ru.loper.sunenchants.SunEnchants
+
+version: '${version}'
+api-version: '1.16'
+
+author: Loper
+site: t.me/bysundev
+
+depend:
+  - SunCore
+softdepend:
+  - PlaceholderAPI
+  - SunGrindStone
+  - SunMobMoney
+  - SunHolyBossEvent
+  - SunAutoMine
