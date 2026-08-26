@@ -1,4 +1,6 @@
 enable: true
+type: potion_effect
+
 bootstrap:
   key: "sunenchants:vampirism"
   description: "Вампиризм"
@@ -13,6 +15,7 @@ bootstrap:
   active-slots: "ANY"
 display_name: "&7Вампиризм {level}"
 cursed: false
+effect_target: attacker
 target:
   - WOODEN_SWORD
   - STONE_SWORD
@@ -30,8 +33,8 @@ levels:
     sounds:
       alone: ""
       around: ""
-    duration_ticks: 40
-    amplifier: 0
+    effects:
+      - "REGENERATION:0:40"
     cooldown_ms: 1500
   2:
     chances:
@@ -40,6 +43,6 @@ levels:
     sounds:
       alone: ""
       around: ""
-    duration_ticks: 60
-    amplifier: 0
+    effects:
+      - "REGENERATION:0:60"
     cooldown_ms: 1200

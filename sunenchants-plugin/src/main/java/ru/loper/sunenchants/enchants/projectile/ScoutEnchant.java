@@ -23,6 +23,8 @@ import ru.loper.sunenchants.utils.VelocityUtils;
 
 @EnchantRegister(name = "scout")
 public class ScoutEnchant extends SEnchant {
+    private static final double GRAVITY_PER_TICK = 0.08D;
+
     private final Map<Integer, MovementSettings> settings = new HashMap<>();
     private final NamespacedKey handledKey;
 
@@ -48,7 +50,6 @@ public class ScoutEnchant extends SEnchant {
                         new MovementSettings(
                                 Math.max(0.0D, levels.getDouble(key + ".force", 1.0D)),
                                 Math.max(0.0D, levels.getDouble(key + ".max_velocity", 3.0D)),
-                                levels.getDouble(key + ".vertical_component", 0.2D),
                                 Math.max(0.0D, levels.getDouble(key + ".max_distance", 48.0D))));
             } catch (NumberFormatException ignored) {
             }
@@ -73,11 +74,28 @@ public class ScoutEnchant extends SEnchant {
         double distance = from.distance(to);
         if (distance <= 0.01D || distance > value.maxDistance()) return;
 
-        Vector velocity = to.toVector().subtract(from.toVector()).normalize().multiply(value.force());
-        velocity.setY(velocity.getY() + value.verticalComponent());
+        Vector velocity = getVelocityToTarget(from, to, value.force());
         player.setVelocity(VelocityUtils.clamp(velocity, value.maxVelocity()));
         level.playSounds(player);
     }
 
-    private record MovementSettings(double force, double maxVelocity, double verticalComponent, double maxDistance) {}
+    private Vector getVelocityToTarget(Location from, Location to, double horizontalSpeed) {
+        double horizontalX = to.getX() - from.getX();
+        double horizontalZ = to.getZ() - from.getZ();
+        double horizontalDistance = Math.hypot(horizontalX, horizontalZ);
+        if (horizontalDistance <= 0.01D || horizontalSpeed <= 0.0D) {
+            return new Vector();
+        }
+
+        double flightTicks = horizontalDistance / horizontalSpeed;
+        double verticalSpeed = (to.getY() - from.getY()) / flightTicks
+                + GRAVITY_PER_TICK * (flightTicks - 1.0D) / 2.0D;
+
+        return new Vector(
+                horizontalX / horizontalDistance * horizontalSpeed,
+                verticalSpeed,
+                horizontalZ / horizontalDistance * horizontalSpeed);
+    }
+
+    private record MovementSettings(double force, double maxVelocity, double maxDistance) {}
 }

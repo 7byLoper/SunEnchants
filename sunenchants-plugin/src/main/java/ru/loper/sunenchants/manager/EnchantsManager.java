@@ -28,6 +28,7 @@ import ru.loper.sunenchants.api.enchants.formatter.impl.PlainEnchantTextFormatte
 import ru.loper.sunenchants.api.enchants.formatter.impl.RomanEnchantLevelFormatter;
 import ru.loper.sunenchants.api.registry.EnchantRegistry;
 import ru.loper.sunenchants.config.EnchantsConfigManager;
+import ru.loper.sunenchants.enchants.combat.ConfigurablePotionEffectEnchant;
 
 @Getter
 public class EnchantsManager {
@@ -103,21 +104,54 @@ public class EnchantsManager {
                             logSkippedEnchant(name, config);
                             return;
                         }
+                        if (isConfigurablePotionEffect(config)) {
+                            return;
+                        }
 
                         NamespacedKey namespacedKey = resolveKey(name);
                         SEnchant enchant = createEnchant(enchantClass, namespacedKey);
 
-                        enchant.loadValues((ConfigurationSection) config.getConfig());
-                        registry.register(enchant);
-                        enchant.setEnabled(true);
-                        registeredEnchants.put(enchant.getEnchantName(), enchant);
-                        enchants.put(enchant.getEnchantName(), enchant);
-                        logLoadedEnchant(enchant, config);
+                        registerEnchant(enchant, config);
                     } catch (Exception e) {
                         plugin.getLogger()
                                 .log(Level.SEVERE, "Failed to register enchant: " + enchantClass.getName(), e);
                     }
                 });
+
+        enchantsConfig.getCatalogEnchantNames().stream()
+                .filter(name -> !registeredEnchants.containsKey(name))
+                .forEach(this::registerConfigurableEnchant);
+    }
+
+    private void registerConfigurableEnchant(String name) {
+        CustomConfig config = enchantsConfig.getEnchantConfig(name);
+        if (config == null || !config.getConfig().getBoolean("enable", true)) {
+            return;
+        }
+        if (!isConfigurablePotionEffect(config)) {
+            logSkippedEnchant(name, config);
+            return;
+        }
+
+        try {
+            SEnchant enchant = new ConfigurablePotionEffectEnchant(resolveKey(name), textFormatter, levelFormatter, name);
+            registerEnchant(enchant, config);
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to register configurable enchant: " + name, e);
+        }
+    }
+
+    private boolean isConfigurablePotionEffect(CustomConfig config) {
+        return "potion_effect".equalsIgnoreCase(config.getConfig().getString("type", ""));
+    }
+
+    private void registerEnchant(SEnchant enchant, CustomConfig config) {
+        enchant.loadValues((ConfigurationSection) config.getConfig());
+        registry.register(enchant);
+        enchant.setEnabled(true);
+        registeredEnchants.put(enchant.getEnchantName(), enchant);
+        enchants.put(enchant.getEnchantName(), enchant);
+        logLoadedEnchant(enchant, config);
     }
 
     private SEnchant createEnchant(Class<? extends SEnchant> enchantClass, NamespacedKey key) throws Exception {

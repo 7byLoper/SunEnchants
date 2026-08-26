@@ -26,7 +26,6 @@ levels:
       around: ""
     force: 1.1
     max_velocity: 2.5
-    vertical_component: 0.15
     max_distance: 32.0
   2:
     chances:
@@ -37,7 +36,6 @@ levels:
       around: ""
     force: 1.4
     max_velocity: 3.0
-    vertical_component: 0.2
     max_distance: 40.0
   3:
     chances:
@@ -48,5 +46,4 @@ levels:
       around: ""
     force: 1.7
     max_velocity: 3.5
-    vertical_component: 0.25
     max_distance: 48.0

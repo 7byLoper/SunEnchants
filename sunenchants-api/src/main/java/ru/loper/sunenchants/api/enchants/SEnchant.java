@@ -51,14 +51,29 @@ public abstract class SEnchant implements Listener {
         this.textFormatter = textFormatter;
         this.levelFormatter = levelFormatter;
 
-        EnchantRegister register = getClass().getAnnotation(EnchantRegister.class);
-        if (register == null) {
-            throw new IllegalStateException(
-                    "Missing @EnchantRegister on " + getClass().getName());
-        }
-
+        EnchantRegister register = getRegister(getClass());
         this.enchantName = register.name();
         this.levelType = register.level();
+    }
+
+    protected SEnchant(
+            @NotNull NamespacedKey namespacedKey,
+            @NotNull EnchantTextFormatter textFormatter,
+            @NotNull EnchantLevelFormatter levelFormatter,
+            @NotNull String enchantName) {
+        this.enchantKey = namespacedKey;
+        this.textFormatter = textFormatter;
+        this.levelFormatter = levelFormatter;
+        this.enchantName = enchantName;
+        this.levelType = EnchantLevelType.DEFAULT;
+    }
+
+    private static EnchantRegister getRegister(Class<?> type) {
+        EnchantRegister register = type.getAnnotation(EnchantRegister.class);
+        if (register == null) {
+            throw new IllegalStateException("Missing @EnchantRegister on " + type.getName());
+        }
+        return register;
     }
 
     public void registerListener(@NotNull Plugin plugin) {

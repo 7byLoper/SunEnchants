@@ -1,4 +1,5 @@
 enable: true
+type: potion_effect
 bootstrap:
   key: "sunenchants:poison"
   description: "Яд"
@@ -13,6 +14,7 @@ bootstrap:
   active-slots: "ANY"
 display_name: "&7Яд {level}"
 cursed: false
+effect_target: victim
 target:
   - WOODEN_SWORD
   - STONE_SWORD
@@ -30,8 +32,8 @@ levels:
     sounds:
       alone: ""
       around: ""
-    duration_ticks: 60
-    amplifier: 0
+    effects:
+      - "POISON:0:60"
   2:
     chances:
       table_enchant: 4
@@ -39,8 +41,8 @@ levels:
     sounds:
       alone: ""
       around: ""
-    duration_ticks: 80
-    amplifier: 0
+    effects:
+      - "POISON:0:80"
   3:
     chances:
       table_enchant: 2
@@ -48,5 +50,5 @@ levels:
     sounds:
       alone: ""
       around: ""
-    duration_ticks: 100
-    amplifier: 1
+    effects:
+      - "POISON:1:100"

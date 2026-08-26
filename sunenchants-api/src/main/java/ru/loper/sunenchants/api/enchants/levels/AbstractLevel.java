@@ -17,11 +17,19 @@ import ru.loper.suncore.api.sound.SoundPlayer;
 public class AbstractLevel {
     private final int workChance, tableChance;
     private final Sound aloneSound, aroundSound;
+    private final float aloneVolume, alonePitch, aroundVolume, aroundPitch;
     private final boolean combining;
 
     public AbstractLevel(@NotNull ConfigurationSection section) {
-        aloneSound = getSound(section.getString("sounds.alone", ""));
-        aroundSound = getSound(section.getString("sounds.around", ""));
+        SoundSettings aloneSettings = getSoundSettings(section.getString("sounds.alone", ""));
+        aloneSound = aloneSettings.sound();
+        aloneVolume = aloneSettings.volume();
+        alonePitch = aloneSettings.pitch();
+
+        SoundSettings aroundSettings = getSoundSettings(section.getString("sounds.around", ""));
+        aroundSound = aroundSettings.sound();
+        aroundVolume = aroundSettings.volume();
+        aroundPitch = aroundSettings.pitch();
 
         workChance = section.getInt("chances.work", 100);
         tableChance = section.getInt("chances.table_enchant", 3);
@@ -29,11 +37,27 @@ public class AbstractLevel {
         combining = section.getBoolean("combining", true);
     }
 
+    private static SoundSettings getSoundSettings(@NotNull String value) {
+        String[] parts = value.split(";", -1);
+        Sound sound = getSound(parts[0].trim());
+        float volume = parts.length > 1 ? getSoundParameter(parts[1]) : 1.0F;
+        float pitch = parts.length > 2 ? getSoundParameter(parts[2]) : 1.0F;
+        return new SoundSettings(sound, volume, pitch);
+    }
+
     private static Sound getSound(@NotNull String name) {
         try {
             return Registry.SOUNDS.get(NamespacedKey.minecraft(name.toLowerCase()));
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    private static float getSoundParameter(String value) {
+        try {
+            return Math.max(0.0F, Float.parseFloat(value.trim()));
+        } catch (NumberFormatException e) {
+            return 1.0F;
         }
     }
 
@@ -63,11 +87,14 @@ public class AbstractLevel {
     public void playAround(Player player) {
         if (aroundSound == null) return;
         Location location = player.getLocation();
-        SoundPlayer.play(player.getLocation(), aroundSound, 1, 1);
+        SoundPlayer.play(location, aroundSound, aroundVolume, aroundPitch);
     }
 
     public void playAlone(Player player) {
         if (aloneSound == null) return;
-        SoundPlayer.play(player, aloneSound, 1, 1);
+        SoundPlayer.play(player, aloneSound, aloneVolume, alonePitch);
+    }
+
+    private record SoundSettings(Sound sound, float volume, float pitch) {
     }
 }
