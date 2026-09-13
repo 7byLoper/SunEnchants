@@ -26,6 +26,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.utils.BulldozerUtils;
 import ru.loper.sunenchants.utils.DurabilityUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MaterialFilter;
 
 @EnchantRegister(name = "web")
@@ -67,7 +68,7 @@ public class WebEnchant extends SEnchant {
         if (BulldozerUtils.isInternalBreak(event.getBlock())) return;
 
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
         Block start = event.getBlock();
         Material veinType = start.getType();
 

@@ -14,6 +14,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.IntLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "critical", level = EnchantLevelType.INTEGER)
 public class CriticalEnchant extends SEnchant {
@@ -33,8 +34,8 @@ public class CriticalEnchant extends SEnchant {
             return;
         }
 
-        ItemStack weapon = damager.getInventory().getItemInMainHand();
-        if (!weapon.hasItemMeta() || !isApplied(weapon)) {
+        ItemStack weapon = HeldItemCache.mainHand(damager);
+        if (!isApplied(weapon)) {
             return;
         }
 

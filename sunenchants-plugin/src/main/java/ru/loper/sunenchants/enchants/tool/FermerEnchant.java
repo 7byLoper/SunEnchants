@@ -15,6 +15,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.IntLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "fermer", level = EnchantLevelType.INTEGER)
 public class FermerEnchant extends SEnchant {
@@ -39,8 +40,8 @@ public class FermerEnchant extends SEnchant {
 
     @EventHandler
     public void onBlockDropItems(BlockDropItemEvent event) {
-        ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        ItemStack tool = HeldItemCache.mainHand(event.getPlayer());
+        if (!isApplied(tool)) {
             return;
         }
 

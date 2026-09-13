@@ -20,6 +20,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.utils.VelocityUtils;
+import ru.loper.suncore.api.hook.antirelog.AntiRelogHook;
 
 @EnchantRegister(name = "scout")
 public class ScoutEnchant extends SEnchant {
@@ -60,6 +61,7 @@ public class ScoutEnchant extends SEnchant {
     public void onHit(ProjectileHitEvent event) {
         if (!(event.getEntity() instanceof Trident trident) || !(trident.getShooter() instanceof Player player)) return;
         if (!player.isOnline() || player.getWorld() != trident.getWorld()) return;
+        if (AntiRelogHook.isPvp(player) || AntiRelogHook.isSilentPvp(player)) return;
         if (trident.getPersistentDataContainer().has(handledKey, PersistentDataType.BYTE)) return;
 
         int enchantLevel = getAppliedLevel(trident.getItemStack());

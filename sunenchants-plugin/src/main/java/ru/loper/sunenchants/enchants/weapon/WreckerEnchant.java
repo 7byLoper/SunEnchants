@@ -17,6 +17,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.IntLevel;
 import ru.loper.sunholybossevent.event.boss.Boss;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "wrecker", level = EnchantLevelType.INTEGER)
 public class WreckerEnchant extends SEnchant {
@@ -40,8 +41,8 @@ public class WreckerEnchant extends SEnchant {
         if (!(event.getDamager() instanceof Player player)) return;
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
 
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (!itemStack.hasItemMeta() || !isApplied(itemStack)) {
+        ItemStack itemStack = HeldItemCache.mainHand(player);
+        if (!isApplied(itemStack)) {
             return;
         }
 

@@ -19,6 +19,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.IntLevel;
 import ru.loper.sunenchants.utils.BulldozerUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MessageUtils;
 
 @EnchantRegister(name = "indestructible", level = EnchantLevelType.INTEGER)
@@ -73,12 +74,12 @@ public class IndestructibleEnchant extends SEnchant {
         }
 
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
         onUse(event, tool, player, 0);
     }
 
     private void onUse(Cancellable event, ItemStack tool, Player player, int incomingDamage) {
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        if (!isApplied(tool)) {
             return;
         }
 

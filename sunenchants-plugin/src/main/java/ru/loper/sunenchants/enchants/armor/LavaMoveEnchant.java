@@ -1,5 +1,6 @@
 package ru.loper.sunenchants.enchants.armor;
 
+import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import ru.loper.sunenchants.SunEnchants;
@@ -30,6 +32,7 @@ import ru.loper.sunenchants.utils.DurabilityUtils;
 @EnchantRegister(name = "lava_move")
 public class LavaMoveEnchant extends SEnchant {
     private final Map<Integer, LavaSettings> settings = new HashMap<>();
+    private final Map<UUID, Integer> cachedLevels = new HashMap<>();
     private final Map<UUID, Long> lastProcess = new ConcurrentHashMap<>();
 
     private boolean restoreEnabled;
@@ -66,6 +69,11 @@ public class LavaMoveEnchant extends SEnchant {
         }
     }
 
+    @Override
+    protected void onEnabledStateChanged(boolean enabled) {
+        cachedLevels.clear();
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
         if (event.getTo() == null) return;
@@ -76,8 +84,8 @@ public class LavaMoveEnchant extends SEnchant {
         }
 
         Player player = event.getPlayer();
-        ItemStack boots = player.getInventory().getBoots();
-        int enchantLevel = getAppliedLevel(boots);
+        int enchantLevel = cachedLevels.computeIfAbsent(
+                player.getUniqueId(), uuid -> getAppliedLevel(player.getInventory().getBoots()));
         LavaSettings value = settings.get(enchantLevel);
         AbstractLevel level = getLevel(enchantLevel);
         if (value == null || level == null || !isCooldownReady(player, value.cooldownMs()) || !level.hasWorkChance())
@@ -87,16 +95,29 @@ public class LavaMoveEnchant extends SEnchant {
         if (changed <= 0) return;
 
         lastProcess.put(player.getUniqueId(), System.currentTimeMillis());
-        if (value.durabilityPerBlock() > 0 && boots != null) {
-            DurabilityUtils.damage(boots, changed * value.durabilityPerBlock());
-            if (boots.getAmount() <= 0) player.getInventory().setBoots(null);
+        if (value.durabilityPerBlock() > 0) {
+            ItemStack boots = player.getInventory().getBoots();
+            if (boots != null) {
+                DurabilityUtils.damage(boots, changed * value.durabilityPerBlock());
+                if (boots.getAmount() <= 0) player.getInventory().setBoots(null);
+            }
         }
         level.playSounds(player);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEquipmentChange(EntityEquipmentChangedEvent event) {
+        if (event.getEntity() instanceof Player player
+                && event.getEquipmentChanges().containsKey(EquipmentSlot.FEET)) {
+            cachedLevels.remove(player.getUniqueId());
+        }
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        lastProcess.remove(event.getPlayer().getUniqueId());
+        UUID uuid = event.getPlayer().getUniqueId();
+        cachedLevels.remove(uuid);
+        lastProcess.remove(uuid);
     }
 
     private int freezeLava(Player player, Block center, LavaSettings value) {

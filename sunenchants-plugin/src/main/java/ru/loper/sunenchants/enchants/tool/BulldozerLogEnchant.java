@@ -23,6 +23,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.manager.EnchantsManager;
 import ru.loper.sunenchants.utils.BulldozerUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MaterialFilter;
 
 @EnchantRegister(name = "bulldozer_log")
@@ -33,6 +34,7 @@ public class BulldozerLogEnchant extends SEnchant {
     private MaterialFilter materialFilter;
     private boolean allowCreative;
     private boolean allowAdventure;
+    private int maxBlocksPerTick;
 
     public BulldozerLogEnchant(
             @NotNull NamespacedKey namespacedKey,
@@ -48,6 +50,7 @@ public class BulldozerLogEnchant extends SEnchant {
         materialFilter = new MaterialFilter(section.getConfigurationSection("block_filter"));
         allowCreative = section.getBoolean("allow_creative", false);
         allowAdventure = section.getBoolean("allow_adventure", false);
+        maxBlocksPerTick = Math.max(1, section.getInt("max_blocks_per_tick", 64));
 
         values.clear();
         ConfigurationSection levels = section.getConfigurationSection("levels");
@@ -80,7 +83,7 @@ public class BulldozerLogEnchant extends SEnchant {
         }
 
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
         if (!isApplied(tool) || !isGameModeAllowed(player.getGameMode())) {
             return;
         }
@@ -116,7 +119,8 @@ public class BulldozerLogEnchant extends SEnchant {
                 materialFilter,
                 settings.radius(),
                 settings.maxBlocks(),
-                settings.durabilityPerBlock());
+                settings.durabilityPerBlock(),
+                maxBlocksPerTick);
         if (broken <= 0) {
             return;
         }

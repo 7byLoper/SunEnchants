@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'com.gradleup.shadow'
 }
 
 archivesBaseName = 'SunEnchants'
@@ -16,7 +16,7 @@ dependencies {
 
     implementation "org.reflections:reflections:${rootProject.ext.versions.reflections}"
 
-    compileOnly "org.bstats:bstats-bukkit:${rootProject.ext.versions.bstats}"
+    implementation "org.bstats:bstats-bukkit:${rootProject.ext.versions.bstats}"
     compileOnly "com.sk89q.worldedit:worldedit-core:${rootProject.ext.versions.worldedit}"
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4") {
         exclude group: "org.spigotmc", module: "spigot-api"
@@ -38,6 +38,8 @@ tasks.processResources {
 
 shadowJar {
     archiveClassifier.set('')
+
+    relocate 'org.bstats', 'ru.loper.sunenchants.libs.bstats'
 
     manifest {
         attributes(

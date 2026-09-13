@@ -22,6 +22,7 @@ import ru.loper.sunenchants.api.enchants.SEnchant;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "melting")
 public class MeltingEnchant extends SEnchant {
@@ -69,7 +70,7 @@ public class MeltingEnchant extends SEnchant {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockDropItems(BlockDropItemEvent event) {
-        ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(event.getPlayer());
         if (!isApplied(tool) || !canMelt(tool)) {
             return;
         }

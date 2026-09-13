@@ -15,10 +15,12 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import ru.loper.sunenchants.api.utils.EnchantUtils;
 import ru.loper.sunenchants.config.EnchantLimitsConfig;
+import ru.loper.sunenchants.manager.EnchantsManager;
 
 @RequiredArgsConstructor
 public class EnchantsLimitListener implements Listener {
     private final EnchantLimitsConfig limitsConfig;
+    private final EnchantsManager enchantManager;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAnvilPrepare(PrepareAnvilEvent event) {
@@ -85,6 +87,7 @@ public class EnchantsLimitListener implements Listener {
             }
         }
 
+        enchantManager.enforceCustomConflicts(resultMeta);
         result.setItemMeta(resultMeta);
         return modified;
     }
@@ -105,7 +108,7 @@ public class EnchantsLimitListener implements Listener {
             Enchantment enchant = itemEntry.getKey();
             int itemLevel = itemEntry.getValue();
 
-            if (limitsConfig.isDisabled(enchant, item)) continue;
+            if (isVanillaEnchantBlocked(item, itemMeta, enchant)) continue;
 
             if (bookMeta.hasStoredEnchant(enchant)) {
                 int bookLevel = bookMeta.getStoredEnchantLevel(enchant);
@@ -122,7 +125,7 @@ public class EnchantsLimitListener implements Listener {
             Enchantment enchant = bookEntry.getKey();
             int bookLevel = bookEntry.getValue();
 
-            if (limitsConfig.isDisabled(enchant, item)) continue;
+            if (isVanillaEnchantBlocked(item, itemMeta, enchant)) continue;
 
             if (!itemMeta.hasEnchant(enchant)) {
                 resultMeta.addEnchant(enchant, bookLevel, true);
@@ -130,6 +133,7 @@ public class EnchantsLimitListener implements Listener {
             }
         }
 
+        enchantManager.enforceCustomConflicts(resultMeta);
         result.setItemMeta(resultMeta);
         return modified;
     }
@@ -147,7 +151,7 @@ public class EnchantsLimitListener implements Listener {
             Enchantment enchant = leftEntry.getKey();
             int leftLevel = leftEntry.getValue();
 
-            if (limitsConfig.isDisabled(enchant, result)) continue;
+            if (isVanillaEnchantBlocked(result, leftMeta, enchant)) continue;
 
             if (rightMeta.hasEnchant(enchant)) {
                 int rightLevel = rightMeta.getEnchantLevel(enchant);
@@ -164,7 +168,7 @@ public class EnchantsLimitListener implements Listener {
             Enchantment enchant = rightEntry.getKey();
             int rightLevel = rightEntry.getValue();
 
-            if (limitsConfig.isDisabled(enchant, result)) continue;
+            if (isVanillaEnchantBlocked(result, leftMeta, enchant)) continue;
 
             if (!leftMeta.hasEnchant(enchant)) {
                 resultMeta.addEnchant(enchant, rightLevel, true);
@@ -172,6 +176,7 @@ public class EnchantsLimitListener implements Listener {
             }
         }
 
+        enchantManager.enforceCustomConflicts(resultMeta);
         result.setItemMeta(resultMeta);
         return modified;
     }
@@ -221,5 +226,9 @@ public class EnchantsLimitListener implements Listener {
         }
 
         return maxCurrent;
+    }
+
+    private boolean isVanillaEnchantBlocked(ItemStack item, ItemMeta meta, Enchantment enchantment) {
+        return limitsConfig.isDisabled(enchantment, item) || enchantManager.hasCustomConflict(meta, enchantment);
     }
 }

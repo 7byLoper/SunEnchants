@@ -142,7 +142,6 @@ public class DemolitionEnchant extends SEnchant {
             double falloff = Math.max(0.0D, 1.0D - distance / radius);
             double damage = settings.damage() * falloff * settings.power();
             if (damage > 0.0D) {
-                // Intentional generic damage: the explosion itself must not re-trigger weapon hit enchantments.
                 living.damage(damage);
             }
 

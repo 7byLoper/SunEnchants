@@ -28,6 +28,8 @@ target:
   - IRON_AXE
   - DIAMOND_AXE
   - NETHERITE_AXE
+# Сколько блоков бульдозер ломает за один тик; остаток доламывается на следующих тиках.
+max_blocks_per_tick: 64
 max_level: 2
 allow_creative: false
 allow_adventure: false

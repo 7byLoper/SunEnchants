@@ -11,6 +11,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,6 +28,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.impl.PlainEnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.impl.RomanEnchantLevelFormatter;
 import ru.loper.sunenchants.api.registry.EnchantRegistry;
+import ru.loper.sunenchants.api.utils.EnchantSnapshotCache;
 import ru.loper.sunenchants.config.EnchantsConfigManager;
 import ru.loper.sunenchants.enchants.combat.ConfigurablePotionEffectEnchant;
 
@@ -40,6 +42,8 @@ public class EnchantsManager {
     private final EnchantLevelFormatter levelFormatter;
     private final Map<String, SEnchant> enchants;
     private final Map<String, SEnchant> registeredEnchants;
+
+    private int revision;
 
     public EnchantsManager(
             EnchantsConfigManager enchantsConfig,
@@ -121,6 +125,8 @@ public class EnchantsManager {
         enchantsConfig.getCatalogEnchantNames().stream()
                 .filter(name -> !registeredEnchants.containsKey(name))
                 .forEach(this::registerConfigurableEnchant);
+
+        revision++;
     }
 
     private void registerConfigurableEnchant(String name) {
@@ -269,6 +275,8 @@ public class EnchantsManager {
                 })
                 .forEach(restartRequired::add);
 
+        revision++;
+
         if (!restartRequired.isEmpty()) {
             plugin.getLogger()
                     .warning("Enchant registry changed after bootstrap. Restart required for: "
@@ -278,6 +286,8 @@ public class EnchantsManager {
     }
 
     public ItemMeta applyEnchant(ItemMeta meta, SEnchant enchant, int level) {
+        removeConflictingEnchants(meta, enchant);
+
         if (!plugin.isModernRegister()) {
             List<Component> newLore = new ArrayList<>();
             String enchantName = enchant.getDisplayName().replace("{level}", "");
@@ -294,6 +304,35 @@ public class EnchantsManager {
         }
 
         return registry.applyEnchant(meta, enchant, level);
+    }
+
+    public void removeConflictingEnchants(ItemMeta meta, SEnchant enchant) {
+        if (meta instanceof EnchantmentStorageMeta storageMeta) {
+            storageMeta.getStoredEnchants().keySet().stream()
+                    .filter(enchant::conflictsWith)
+                    .toList()
+                    .forEach(storageMeta::removeStoredEnchant);
+            return;
+        }
+
+        meta.getEnchants().keySet().stream()
+                .filter(enchant::conflictsWith)
+                .toList()
+                .forEach(meta::removeEnchant);
+    }
+
+    public boolean hasCustomConflict(ItemMeta meta, Enchantment enchantment) {
+        Map<SEnchant, Integer> enchantments = meta instanceof EnchantmentStorageMeta
+                ? registry.getStoredEnchantments(meta)
+                : registry.getEnchantments(meta);
+        return enchantments.keySet().stream().anyMatch(customEnchant -> customEnchant.conflictsWith(enchantment));
+    }
+
+    public void enforceCustomConflicts(ItemMeta meta) {
+        Map<SEnchant, Integer> enchantments = meta instanceof EnchantmentStorageMeta
+                ? registry.getStoredEnchantments(meta)
+                : registry.getEnchantments(meta);
+        enchantments.keySet().forEach(enchant -> removeConflictingEnchants(meta, enchant));
     }
 
     public ItemStack getEnchantBook(SEnchant enchant, int level) {
@@ -313,6 +352,7 @@ public class EnchantsManager {
         }
 
         if (item.getType() == Material.ENCHANTED_BOOK) {
+            removeConflictingEnchants(meta, enchant);
             meta = registry.addStoredEnchant(meta, enchant, level);
             if (!plugin.isModernRegister()) {
                 meta.lore(List.of(enchant.displayName(level)));
@@ -321,7 +361,16 @@ public class EnchantsManager {
             meta = applyEnchant(meta, enchant, level);
         }
 
+        if (!plugin.isModernRegister()) {
+            if (meta instanceof EnchantmentStorageMeta storageMeta) {
+                updateBookEnchantLore(storageMeta);
+            } else {
+                updateEnchantLore(meta);
+            }
+        }
+
         item.setItemMeta(meta);
+        EnchantSnapshotCache.invalidate(item);
     }
 
     public void updateBookEnchantLore(EnchantmentStorageMeta meta) {

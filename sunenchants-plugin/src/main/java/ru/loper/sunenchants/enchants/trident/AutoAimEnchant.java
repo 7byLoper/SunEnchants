@@ -48,7 +48,7 @@ public class AutoAimEnchant extends SEnchant {
 
         ItemStack tridentItem = getTridentItem(trident);
 
-        if (!tridentItem.hasItemMeta() || !isApplied(tridentItem)) {
+        if (!isApplied(tridentItem)) {
             return;
         }
 

@@ -14,6 +14,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.api.utils.FarmUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "delicate")
 public class DelicateEnchant extends SEnchant {
@@ -32,9 +33,9 @@ public class DelicateEnchant extends SEnchant {
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
 
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        if (!isApplied(tool)) {
             return;
         }
 

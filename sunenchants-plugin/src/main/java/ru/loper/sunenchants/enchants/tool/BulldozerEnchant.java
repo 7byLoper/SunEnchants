@@ -30,6 +30,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.manager.EnchantsManager;
 import ru.loper.sunenchants.utils.BulldozerUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MaterialFilter;
 import ru.loper.sunenchants.utils.MessageUtils;
 
@@ -45,6 +46,7 @@ public class BulldozerEnchant extends SEnchant {
     private String offMessage;
     private boolean allowCreative;
     private boolean allowAdventure;
+    private int maxBlocksPerTick;
 
     public BulldozerEnchant(
             @NotNull NamespacedKey namespacedKey,
@@ -63,6 +65,7 @@ public class BulldozerEnchant extends SEnchant {
         offMessage = section.getString("off_message", "<red>Бульдозер выключен");
         allowCreative = section.getBoolean("allow_creative", false);
         allowAdventure = section.getBoolean("allow_adventure", false);
+        maxBlocksPerTick = Math.max(1, section.getInt("max_blocks_per_tick", 64));
 
         values.clear();
         ConfigurationSection levels = section.getConfigurationSection("levels");
@@ -102,7 +105,7 @@ public class BulldozerEnchant extends SEnchant {
         if (BulldozerUtils.isInternalBreak(event.getBlock())) return;
 
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
         if (!isApplied(tool)
                 || enchantsManager.hasEnchant("bulldozer_log", tool)
                 || enchantsManager.hasEnchant("mega_bulldozer", tool)
@@ -143,7 +146,8 @@ public class BulldozerEnchant extends SEnchant {
                     materialFilter,
                     settings.radius(),
                     settings.maxBlocks(),
-                    settings.durabilityPerBlock());
+                    settings.durabilityPerBlock(),
+                    maxBlocksPerTick);
         } else {
             broken = bulldozerUtils.breakBlocksInCube(
                     center,
@@ -154,7 +158,8 @@ public class BulldozerEnchant extends SEnchant {
                     null,
                     materialFilter,
                     settings.maxBlocks(),
-                    settings.durabilityPerBlock());
+                    settings.durabilityPerBlock(),
+                    maxBlocksPerTick);
         }
 
         if (broken <= 0) return;

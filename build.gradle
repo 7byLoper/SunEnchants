@@ -1,6 +1,8 @@
+import org.gradle.api.attributes.java.TargetJvmVersion
+
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
 ext.versions = [
@@ -8,7 +10,7 @@ ext.versions = [
         paperModern   : '1.21.11-R0.1-SNAPSHOT',
         lombok        : '1.18.38',
         reflections   : '0.10.2',
-        bstats        : '1.7',
+        bstats        : '3.0.2',
         worldedit     : '7.2.17',
         worldguard    : '7.0.4',
         placeholderapi: '2.11.6',
@@ -43,11 +45,21 @@ subprojects {
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
-        options.release = 21
+        options.release = 17
     }
 
     dependencies {
         compileOnly "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
         annotationProcessor "org.projectlombok:lombok:${rootProject.ext.versions.lombok}"
+
+        components {
+            withModule('io.papermc.paper:paper-api') {
+                allVariants {
+                    attributes {
+                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+                    }
+                }
+            }
+        }
     }
 }

@@ -2,7 +2,10 @@ package ru.loper.sunenchants.api.enchants;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +25,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
+import ru.loper.sunenchants.api.utils.EnchantSnapshotCache;
 import ru.loper.sunenchants.api.utils.EnchantUtils;
 
 @Getter
@@ -38,6 +42,7 @@ public abstract class SEnchant implements Listener {
     private boolean enabled = true;
     private int maxLevel;
     private List<Material> allowedTools = Collections.emptyList();
+    private Set<String> conflicts = Collections.emptySet();
     private Map<Integer, AbstractLevel> enchantmentLevels = Collections.emptyMap();
 
     @Setter
@@ -111,6 +116,10 @@ public abstract class SEnchant implements Listener {
         this.displayName = textFormatter.format(section.getString("display_name", enchantName));
         this.maxLevel = section.getInt("max_level");
         this.allowedTools = EnchantUtils.parseTools(section.getStringList("target"));
+        this.conflicts = section.getStringList("conflicts").stream()
+                .map(conflict -> conflict.trim().toLowerCase(Locale.ROOT))
+                .filter(conflict -> !conflict.isBlank())
+                .collect(Collectors.toUnmodifiableSet());
         this.enchantmentLevels = levelType.getEnchantLevels(section.getConfigurationSection("levels"));
         this.coursed = section.getBoolean("cursed", section.getBoolean("coursed", false));
 
@@ -120,19 +129,24 @@ public abstract class SEnchant implements Listener {
     protected abstract void parseValues(@NotNull ConfigurationSection section);
 
     public boolean isApplied(@Nullable ItemStack itemStack) {
-        if (!enabled || itemStack == null || !itemStack.hasItemMeta() || bukkitEnchantment == null) {
+        if (!enabled || itemStack == null || bukkitEnchantment == null) {
             return false;
         }
 
-        return itemStack.containsEnchantment(bukkitEnchantment);
+        return EnchantSnapshotCache.enchantments(itemStack).containsKey(bukkitEnchantment);
+    }
+
+    public boolean conflictsWith(@NotNull Enchantment enchantment) {
+        NamespacedKey key = enchantment.getKey();
+        return conflicts.contains(key.toString()) || conflicts.contains(key.getKey());
     }
 
     public int getAppliedLevel(@Nullable ItemStack itemStack) {
-        if (!enabled || itemStack == null || !itemStack.hasItemMeta() || bukkitEnchantment == null) {
+        if (!enabled || itemStack == null || bukkitEnchantment == null) {
             return 0;
         }
 
-        return itemStack.getEnchantmentLevel(bukkitEnchantment);
+        return EnchantSnapshotCache.enchantments(itemStack).getOrDefault(bukkitEnchantment, 0);
     }
 
     @Nullable
@@ -141,8 +155,7 @@ public abstract class SEnchant implements Listener {
             return null;
         }
 
-        int level = itemStack.getEnchantmentLevel(bukkitEnchantment);
-        return getLevel(level);
+        return getLevel(EnchantSnapshotCache.enchantments(itemStack).getOrDefault(bukkitEnchantment, 0));
     }
 
     @Nullable

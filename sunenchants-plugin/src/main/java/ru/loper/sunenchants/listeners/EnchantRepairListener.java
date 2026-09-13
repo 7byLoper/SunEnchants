@@ -1,10 +1,12 @@
 package ru.loper.sunenchants.listeners;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -22,33 +24,38 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.Nullable;
 import ru.loper.sunenchants.SunEnchants;
 import ru.loper.sunenchants.api.enchants.SEnchant;
+import ru.loper.sunenchants.api.utils.EnchantSnapshotCache;
 import ru.loper.sunenchants.manager.EnchantsManager;
 
 @RequiredArgsConstructor
 public class EnchantRepairListener implements Listener {
     private final EnchantsManager enchantsManager;
 
+    private final Map<String, LegacyMatch> legacyLookup = new HashMap<>();
+
+    private int lookupRevision = -1;
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
-        if (!enchantsManager.getEnchantsConfig().isLegacyLoreMigrationEnabled()) {
+        if (!isMigrationEnabled()) {
             return;
         }
 
         Bukkit.getScheduler()
                 .runTaskLater(
                         SunEnchants.getInstance(),
-                        () -> fixInventory(event.getPlayer()),
+                        () -> migratePlayer(event.getPlayer()),
                         enchantsManager.getEnchantsConfig().getInventoryMigrationDelay());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!enchantsManager.getEnchantsConfig().isLegacyLoreMigrationEnabled()) {
+        if (!isMigrationEnabled()) {
             return;
         }
 
         ItemStack item = event.getCurrentItem();
-        if (item == null || item.getType().isAir()) {
+        if (!hasLegacyCandidate(item)) {
             return;
         }
 
@@ -59,15 +66,26 @@ public class EnchantRepairListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryOpen(InventoryOpenEvent event) {
-        if (!enchantsManager.getEnchantsConfig().isLegacyLoreMigrationEnabled()
-                || event.getInventory() instanceof EnchantingInventory) {
+        if (!isMigrationEnabled() || event.getInventory() instanceof EnchantingInventory) {
             return;
         }
 
-        fixInventory(event.getInventory());
+        if (!(event.getPlayer() instanceof Player player)) {
+            return;
+        }
+
+        fixInventory(player.getInventory());
     }
 
-    private void fixInventory(Player player) {
+    private boolean isMigrationEnabled() {
+        return enchantsManager.getEnchantsConfig().isLegacyLoreMigrationEnabled();
+    }
+
+    private void migratePlayer(Player player) {
+        if (!player.isOnline()) {
+            return;
+        }
+
         fixInventory(player.getInventory());
     }
 
@@ -76,7 +94,9 @@ public class EnchantRepairListener implements Listener {
         boolean changed = false;
 
         for (ItemStack item : contents) {
-            changed |= fixItem(item);
+            if (hasLegacyCandidate(item)) {
+                changed |= fixItem(item);
+            }
         }
 
         if (changed) {
@@ -84,8 +104,12 @@ public class EnchantRepairListener implements Listener {
         }
     }
 
+    private boolean hasLegacyCandidate(@Nullable ItemStack item) {
+        return item != null && !item.getType().isAir() && EnchantSnapshotCache.hasLore(item);
+    }
+
     private boolean fixItem(@Nullable ItemStack item) {
-        if (item == null || item.getType().isAir() || !item.hasItemMeta()) {
+        if (item == null || item.getType().isAir()) {
             return false;
         }
 
@@ -99,20 +123,53 @@ public class EnchantRepairListener implements Listener {
             return false;
         }
 
-        List<String> legacyLore =
-                lore.stream().map(enchantsManager::componentToLegacy).toList();
+        Map<SEnchant, Integer> legacyEnchants = findLegacyEnchants(lore);
+        if (legacyEnchants.isEmpty()) {
+            return false;
+        }
 
-        Map<SEnchant, Integer> legacyEnchants = enchantsManager.getEnchants().values().stream()
-                .flatMap(enchant -> Optional.ofNullable(findLevelInLegacyLore(legacyLore, enchant)).stream()
-                        .map(level -> Map.entry(enchant, level)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        var missingEnchants = legacyEnchants.entrySet().stream()
-                .filter(entry -> !hasEnchant(item, entry.getKey(), entry.getValue()))
-                .toList();
+        List<Map.Entry<SEnchant, Integer>> missingEnchants = new ArrayList<>();
+        for (Map.Entry<SEnchant, Integer> entry : legacyEnchants.entrySet()) {
+            if (!hasEnchant(item, entry.getKey(), entry.getValue())) {
+                missingEnchants.add(entry);
+            }
+        }
 
         missingEnchants.forEach(entry -> enchantsManager.addEnchant(item, entry.getKey(), entry.getValue()));
         boolean loreRemoved = removeLegacyLore(item, legacyEnchants);
         return !missingEnchants.isEmpty() || loreRemoved;
+    }
+
+    private Map<SEnchant, Integer> findLegacyEnchants(List<Component> lore) {
+        Map<String, LegacyMatch> lookup = legacyLookup();
+        Map<SEnchant, Integer> found = new HashMap<>();
+
+        for (Component line : lore) {
+            LegacyMatch match = lookup.get(enchantsManager.componentToLegacy(line));
+            if (match != null) {
+                found.putIfAbsent(match.enchant(), match.level());
+            }
+        }
+        return found;
+    }
+
+    private Map<String, LegacyMatch> legacyLookup() {
+        int revision = enchantsManager.getRevision();
+        if (revision == lookupRevision) {
+            return legacyLookup;
+        }
+
+        legacyLookup.clear();
+        for (SEnchant enchant : enchantsManager.getEnchants().values()) {
+            for (int level : enchant.getEnchantmentLevels().keySet()) {
+                legacyLookup.putIfAbsent(
+                        enchantsManager.componentToLegacy(enchant.displayName(level)),
+                        new LegacyMatch(enchant, level));
+            }
+        }
+
+        lookupRevision = revision;
+        return legacyLookup;
     }
 
     private boolean hasEnchant(ItemStack item, SEnchant enchant, int level) {
@@ -124,13 +181,6 @@ public class EnchantRepairListener implements Listener {
                 : registry.getEnchantments(meta).get(enchant);
 
         return currentLevel != null && currentLevel == level;
-    }
-
-    private Integer findLevelInLegacyLore(List<String> legacyLore, SEnchant enchant) {
-        return enchant.getEnchantmentLevels().keySet().stream()
-                .filter(level -> legacyLore.contains(enchantsManager.componentToLegacy(enchant.displayName(level))))
-                .findFirst()
-                .orElse(null);
     }
 
     private boolean removeLegacyLore(ItemStack item, Map<SEnchant, Integer> legacyEnchants) {
@@ -146,12 +196,16 @@ public class EnchantRepairListener implements Listener {
             return false;
         }
 
-        var legacyLines = legacyEnchants.entrySet().stream()
-                .map(entry -> enchantsManager.componentToLegacy(entry.getKey().displayName(entry.getValue())))
-                .collect(Collectors.toSet());
-        List<Component> migratedLore = lore.stream()
-                .filter(line -> !legacyLines.contains(enchantsManager.componentToLegacy(line)))
-                .toList();
+        Set<String> legacyLines = new HashSet<>();
+        legacyEnchants.forEach(
+                (enchant, level) -> legacyLines.add(enchantsManager.componentToLegacy(enchant.displayName(level))));
+
+        List<Component> migratedLore = new ArrayList<>(lore.size());
+        for (Component line : lore) {
+            if (!legacyLines.contains(enchantsManager.componentToLegacy(line))) {
+                migratedLore.add(line);
+            }
+        }
 
         if (Objects.equals(lore, migratedLore)) {
             return false;
@@ -161,4 +215,6 @@ public class EnchantRepairListener implements Listener {
         item.setItemMeta(meta);
         return true;
     }
+
+    private record LegacyMatch(SEnchant enchant, int level) {}
 }

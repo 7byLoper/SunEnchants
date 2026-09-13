@@ -19,6 +19,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.IntLevel;
 import ru.loper.sunenchants.api.utils.EnchantUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "destroyer", level = EnchantLevelType.INTEGER)
 public class DestroyerEnchant extends SEnchant {
@@ -41,8 +42,8 @@ public class DestroyerEnchant extends SEnchant {
             return;
         }
 
-        ItemStack weapon = damager.getInventory().getItemInMainHand();
-        if (!weapon.hasItemMeta() || !isApplied(weapon)) {
+        ItemStack weapon = HeldItemCache.mainHand(damager);
+        if (!isApplied(weapon)) {
             return;
         }
 

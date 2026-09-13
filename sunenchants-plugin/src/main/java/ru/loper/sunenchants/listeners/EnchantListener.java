@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import ru.loper.sunenchants.api.enchants.SEnchant;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.manager.EnchantsManager;
@@ -21,6 +22,10 @@ public class EnchantListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
         ItemStack item = event.getItem();
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta != null) {
+            event.getEnchantsToAdd().keySet().removeIf(enchant -> enchantManager.hasCustomConflict(itemMeta, enchant));
+        }
 
         for (SEnchant enchant : getApplicableEnchants(item)) {
             Enchantment bukkitEnchant = enchant.getBukkitEnchantment();
@@ -30,6 +35,12 @@ public class EnchantListener implements Listener {
 
             int level = rollLevel(enchant.getEnchantmentLevels());
             if (level > 0) {
+                event.getEnchantsToAdd().keySet().removeIf(enchant::conflictsWith);
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    enchantManager.removeConflictingEnchants(meta, enchant);
+                    item.setItemMeta(meta);
+                }
                 event.getEnchantsToAdd().put(bukkitEnchant, level);
             }
         }

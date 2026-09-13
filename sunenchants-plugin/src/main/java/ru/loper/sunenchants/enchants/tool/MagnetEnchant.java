@@ -24,6 +24,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.enchants.misc.FilterEnchant;
 import ru.loper.sunenchants.manager.EnchantsManager;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "magnet")
 public class MagnetEnchant extends SEnchant {
@@ -43,8 +44,8 @@ public class MagnetEnchant extends SEnchant {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockDropItems(BlockDropItemEvent event) {
-        ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
-        if (!tool.hasItemMeta() || !isApplied(tool)) return;
+        ItemStack tool = HeldItemCache.mainHand(event.getPlayer());
+        if (!isApplied(tool)) return;
 
         AbstractLevel level = getLevel(tool);
         if (level == null || !level.hasWorkChance()) return;
@@ -67,7 +68,7 @@ public class MagnetEnchant extends SEnchant {
     @EventHandler
     public void onAutoMineBreak(MineBlockBreakEvent event) {
         ItemStack tool = event.getTool();
-        if (!tool.hasItemMeta() || !isApplied(tool)) return;
+        if (!isApplied(tool)) return;
 
         AbstractLevel level = getLevel(tool);
         if (level == null || !level.hasWorkChance()) return;

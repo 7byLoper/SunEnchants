@@ -3,6 +3,8 @@ package ru.loper.sunenchants.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,39 @@ public class BulldozerUtils {
     private static final Set<Block> INTERNAL_BREAKS = ConcurrentHashMap.newKeySet();
     private static final Set<Block> PROTECTION_CHECKS = ConcurrentHashMap.newKeySet();
 
+    private static final Set<Material> CONTAINER_MATERIALS = containerMaterials();
+
     private final EnchantsManager enchantsManager;
+
+    private static Set<Material> containerMaterials() {
+        Set<Material> materials = EnumSet.noneOf(Material.class);
+        List<String> names = List.of(
+                "CHEST",
+                "TRAPPED_CHEST",
+                "BARREL",
+                "HOPPER",
+                "DISPENSER",
+                "DROPPER",
+                "FURNACE",
+                "BLAST_FURNACE",
+                "SMOKER",
+                "BREWING_STAND",
+                "CRAFTER");
+
+        for (String name : names) {
+            Material material = Material.getMaterial(name);
+            if (material != null) {
+                materials.add(material);
+            }
+        }
+
+        for (Material material : Material.values()) {
+            if (material.name().endsWith("SHULKER_BOX")) {
+                materials.add(material);
+            }
+        }
+        return materials;
+    }
 
     public static boolean isInternalBreak(Block block) {
         return INTERNAL_BREAKS.contains(block);
@@ -63,16 +97,31 @@ public class BulldozerUtils {
     }
 
     public boolean isBreakable(Block block, ItemStack tool, MaterialFilter filter) {
-        if (block == null || block.isEmpty() || block.isLiquid()) {
+        if (block == null) {
             return false;
         }
 
         Material type = block.getType();
-        if (type == Material.BEDROCK || type == Material.BARRIER) {
+        if (type.isAir() || type == Material.BEDROCK || type == Material.BARRIER || isLiquid(type)) {
             return false;
         }
 
         return filter == null ? ToolUtils.isEffectiveTool(type, tool) : filter.allows(type, tool);
+    }
+
+    private static final Set<Material> LIQUID_MATERIALS = liquidMaterials();
+
+    private static Set<Material> liquidMaterials() {
+        Set<Material> materials = EnumSet.of(Material.WATER, Material.LAVA);
+        Material bubbleColumn = Material.getMaterial("BUBBLE_COLUMN");
+        if (bubbleColumn != null) {
+            materials.add(bubbleColumn);
+        }
+        return materials;
+    }
+
+    private static boolean isLiquid(Material type) {
+        return LIQUID_MATERIALS.contains(type);
     }
 
     public int breakBlocksInPlane(
@@ -143,22 +192,47 @@ public class BulldozerUtils {
             int radius,
             int maxBlocks,
             int durabilityPerBlock) {
-        int safeRadius = Math.max(0, radius);
-        int safeMaxBlocks = Math.max(0, maxBlocks);
-        int count = 0;
+        return breakBlocksInPlane(
+                center,
+                tool,
+                player,
+                useXZ,
+                useXY,
+                useYZ,
+                collectedItems,
+                processedBlocks,
+                filter,
+                radius,
+                maxBlocks,
+                durabilityPerBlock,
+                Integer.MAX_VALUE);
+    }
 
-        for (int a = -safeRadius; a <= safeRadius && count < safeMaxBlocks && tool.getAmount() > 0; a++) {
-            for (int b = -safeRadius; b <= safeRadius && count < safeMaxBlocks && tool.getAmount() > 0; b++) {
-                Block target = getRelativeBlock(center, a, b, useXZ, useXY, useYZ);
-                if (target.equals(center)) {
-                    continue;
-                }
-
-                count = breakBlock(
-                        tool, player, collectedItems, processedBlocks, count, target, filter, durabilityPerBlock);
-            }
-        }
-        return count;
+    public int breakBlocksInPlane(
+            Block center,
+            ItemStack tool,
+            Player player,
+            boolean useXZ,
+            boolean useXY,
+            boolean useYZ,
+            Collection<ItemStack> collectedItems,
+            Set<Block> processedBlocks,
+            MaterialFilter filter,
+            int radius,
+            int maxBlocks,
+            int durabilityPerBlock,
+            int maxBlocksPerTick) {
+        List<Block> targets = planeTargets(center, Math.max(0, radius), useXZ, useXY, useYZ);
+        return breakTargets(
+                targets,
+                tool,
+                player,
+                collectedItems,
+                processedBlocks,
+                filter,
+                Math.max(0, maxBlocks),
+                durabilityPerBlock,
+                maxBlocksPerTick);
     }
 
     public int breakBlocksInCube(
@@ -204,25 +278,130 @@ public class BulldozerUtils {
             MaterialFilter filter,
             int maxBlocks,
             int durabilityPerBlock) {
-        int safeRadius = Math.max(0, radius);
-        int safeMaxBlocks = Math.max(0, maxBlocks);
-        int count = 0;
+        return breakBlocksInCube(
+                center,
+                tool,
+                player,
+                radius,
+                collectedItems,
+                processedBlocks,
+                filter,
+                maxBlocks,
+                durabilityPerBlock,
+                Integer.MAX_VALUE);
+    }
 
-        for (int x = -safeRadius; x <= safeRadius && count < safeMaxBlocks && tool.getAmount() > 0; x++) {
-            for (int y = -safeRadius; y <= safeRadius && count < safeMaxBlocks && tool.getAmount() > 0; y++) {
-                for (int z = -safeRadius; z <= safeRadius && count < safeMaxBlocks && tool.getAmount() > 0; z++) {
-                    Block target = center.getRelative(x, y, z);
-                    if (target.equals(center)) {
+    public int breakBlocksInCube(
+            Block center,
+            ItemStack tool,
+            Player player,
+            int radius,
+            Collection<ItemStack> collectedItems,
+            Set<Block> processedBlocks,
+            MaterialFilter filter,
+            int maxBlocks,
+            int durabilityPerBlock,
+            int maxBlocksPerTick) {
+        List<Block> targets = cubeTargets(center, Math.max(0, radius));
+        return breakTargets(
+                targets,
+                tool,
+                player,
+                collectedItems,
+                processedBlocks,
+                filter,
+                Math.max(0, maxBlocks),
+                durabilityPerBlock,
+                maxBlocksPerTick);
+    }
+
+    private List<Block> planeTargets(Block center, int radius, boolean useXZ, boolean useXY, boolean useYZ) {
+        int diameter = radius * 2 + 1;
+        List<Block> targets = new ArrayList<>(diameter * diameter);
+
+        for (int a = -radius; a <= radius; a++) {
+            for (int b = -radius; b <= radius; b++) {
+                if (a == 0 && b == 0) {
+                    continue;
+                }
+                targets.add(getRelativeBlock(center, a, b, useXZ, useXY, useYZ));
+            }
+        }
+        return targets;
+    }
+
+    private List<Block> cubeTargets(Block center, int radius) {
+        int diameter = radius * 2 + 1;
+        List<Block> targets = new ArrayList<>(diameter * diameter * diameter);
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (x == 0 && y == 0 && z == 0) {
                         continue;
                     }
-
-                    count = breakBlock(
-                            tool, player, collectedItems, processedBlocks, count, target, filter, durabilityPerBlock);
+                    targets.add(center.getRelative(x, y, z));
                 }
             }
         }
-        return count;
+        return targets;
     }
+
+    int breakTargets(
+            List<Block> targets,
+            ItemStack tool,
+            Player player,
+            Collection<ItemStack> collectedItems,
+            Set<Block> processedBlocks,
+            MaterialFilter filter,
+            int maxBlocks,
+            int durabilityPerBlock,
+            int maxBlocksPerTick) {
+        int budget = Math.min(maxBlocks, Math.max(1, maxBlocksPerTick));
+        RunResult result = runTargets(
+                targets, 0, tool, player, collectedItems, processedBlocks, filter, budget, durabilityPerBlock);
+
+        boolean hasLeftover = result.visited() < targets.size() && result.broken() < maxBlocks;
+        if (hasLeftover && budget < maxBlocks && tool.getAmount() > 0) {
+            BulldozerQueue.enqueue(new BulldozerQueue.PendingBreak(
+                    this,
+                    player,
+                    tool,
+                    targets,
+                    result.visited(),
+                    processedBlocks,
+                    filter,
+                    maxBlocks - result.broken(),
+                    durabilityPerBlock,
+                    budget));
+        }
+
+        return result.broken();
+    }
+
+    RunResult runTargets(
+            List<Block> targets,
+            int fromIndex,
+            ItemStack tool,
+            Player player,
+            Collection<ItemStack> collectedItems,
+            Set<Block> processedBlocks,
+            MaterialFilter filter,
+            int maxBreaks,
+            int durabilityPerBlock) {
+        int broken = 0;
+        int index = fromIndex;
+
+        while (index < targets.size() && broken < maxBreaks && tool.getAmount() > 0) {
+            Block target = targets.get(index++);
+            broken = breakBlock(
+                    tool, player, collectedItems, processedBlocks, broken, target, filter, durabilityPerBlock);
+        }
+
+        return new RunResult(broken, index);
+    }
+
+    record RunResult(int broken, int visited) {}
 
     private int breakBlock(
             ItemStack tool,
@@ -291,7 +470,8 @@ public class BulldozerUtils {
     }
 
     private Collection<ItemStack> collectContainerContents(Block block) {
-        if (block.getType().name().endsWith("_SHULKER_BOX")) {
+        Material type = block.getType();
+        if (!CONTAINER_MATERIALS.contains(type) || type.name().endsWith("SHULKER_BOX")) {
             return Collections.emptyList();
         }
 

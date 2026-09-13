@@ -20,6 +20,7 @@ import ru.loper.sunenchants.api.enchants.SEnchant;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "filter")
 public class FilterEnchant extends SEnchant {
@@ -48,9 +49,9 @@ public class FilterEnchant extends SEnchant {
     @EventHandler(ignoreCancelled = true)
     public void onDropItem(BlockDropItemEvent event) {
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
 
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        if (!isApplied(tool)) {
             return;
         }
 
@@ -67,7 +68,7 @@ public class FilterEnchant extends SEnchant {
         Player player = event.getPlayer();
         ItemStack tool = event.getTool();
 
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        if (!isApplied(tool)) {
             return;
         }
 
@@ -86,8 +87,8 @@ public class FilterEnchant extends SEnchant {
             return;
         }
 
-        ItemStack weapon = killer.getInventory().getItemInMainHand();
-        if (!weapon.hasItemMeta() || !isApplied(weapon)) {
+        ItemStack weapon = HeldItemCache.mainHand(killer);
+        if (!isApplied(weapon)) {
             return;
         }
 

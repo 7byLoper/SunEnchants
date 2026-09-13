@@ -24,6 +24,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.utils.CombatUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MaterialPatterns;
 
 @EnchantRegister(name = "exp_boost")
@@ -77,7 +78,7 @@ public class ExpBoostEnchant extends SEnchant {
             return;
         }
 
-        ItemStack tool = event.getPlayer().getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(event.getPlayer());
         int enchantLevel = getAppliedLevel(tool);
         ExperienceLevel value = values.get(enchantLevel);
         AbstractLevel level = getLevel(enchantLevel);

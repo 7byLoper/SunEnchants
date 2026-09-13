@@ -44,6 +44,8 @@ target:
   - IRON_HOE
   - DIAMOND_HOE
   - NETHERITE_HOE
+# Сколько блоков бульдозер ломает за один тик; остаток доламывается на следующих тиках.
+max_blocks_per_tick: 64
 max_level: 2
 on_message: '<#00FF00>[✓] <reset>%theme_color-3%Мега-бульдозер включён.<reset>'
 off_message: '%theme_color-1%[✘] <reset>%theme_color-3%Мега-бульдозер выключен.<reset>'

@@ -16,6 +16,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.EffectsLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "stunning", level = EnchantLevelType.EFFECTS)
 public class StunningEnchant extends SEnchant {
@@ -36,8 +37,8 @@ public class StunningEnchant extends SEnchant {
             return;
         }
 
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (!itemStack.hasItemMeta() || !isApplied(itemStack)) {
+        ItemStack itemStack = HeldItemCache.mainHand(player);
+        if (!isApplied(itemStack)) {
             return;
         }
 

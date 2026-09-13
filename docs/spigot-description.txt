@@ -1,0 +1,71 @@
+[CENTER][SIZE=7][B]SunEnchants[/B][/SIZE]
+[SIZE=4]36 кастомных зачарований для Paper и Spigot 1.16.5 – 1.21.x[/SIZE]
+
+[SIZE=3][URL=https://t.me/gloomdev]Telegram / Поддержка[/URL]  •  [URL=https://github.com/7byLoper/SunEnchants]GitHub[/URL][/SIZE][/CENTER]
+
+[SIZE=6][B]О плагине[/B][/SIZE]
+SunEnchants добавляет на сервер 36 собственных зачарований, которые работают как часть ванильной системы. Чары выпадают в столе зачарования, переносятся наковальней, отображаются в лоре предмета и полностью настраиваются под ваш сервер. Один плагин поддерживает как старые сборки 1.16.5, так и современные 1.21.x — версия определяется автоматически при запуске.
+
+[SIZE=6][B]Что умеет плагин[/B][/SIZE]
+[LIST]
+[*][B]36 зачарований[/B] для оружия, брони, инструментов, луков и трезубцев.
+[*][B]Единая поддержка 1.16.5 – 1.21.x[/B] без отдельных сборок под каждую версию.
+[*][B]Гибкая настройка каждого чара[/B]: уровни, шанс выпадения в столе, шанс срабатывания, звуки и эффекты — всё в отдельном YAML-файле.
+[*][B]Whitelist[/B] активных зачарований — включение и отключение одной строкой.
+[*][B]Лимиты[/B] на количество и сочетания чаров на одном предмете.
+[*][B]Настраиваемые сообщения[/B] с поддержкой MiniMessage и цветовых кодов.
+[*][B]Интеграция с PlaceholderAPI[/B] и плагинами экосистемы Sun.
+[*][B]Миграция лора[/B] при переходе со старых версий.
+[/LIST]
+
+[SIZE=6][B]Требования[/B][/SIZE]
+[LIST]
+[*]Ядро: [B]Paper / Spigot 1.16.5 – 1.21.x[/B]
+[*]Java: [B]17+[/B]
+[*]Обязательная зависимость: [B]SunCore[/B]
+[/LIST]
+[B]Необязательные зависимости[/B] (подключаются автоматически, если установлены): PlaceholderAPI, WorldGuard, WorldEdit, SunGrindStone, SunMobMoney, SunHolyBossEvent, SunAutoMine, AntiRelog.
+
+[SIZE=6][B]Команды и права[/B][/SIZE]
+[LIST]
+[*][B]/senchants enchant <чар> <уровень>[/B] — наложить зачарование на предмет в руке [I](senchants.command.enchant)[/I]
+[*][B]/senchants givebook <чар> <уровень> [игрок][/B] — выдать зачарованную книгу [I](senchants.command.givebook)[/I]
+[*][B]/senchants reload[/B] — перезагрузить конфигурацию [I](senchants.command.reload)[/I]
+[*][B]/setfilter[/B] — настроить фильтр для чара «Фильтр»
+[/LIST]
+Базовый доступ к команде — право [B]senchants.command.use[/B].
+
+[SIZE=6][B]Установка[/B][/SIZE]
+[LIST=1]
+[*]Установите обязательную зависимость [B]SunCore[/B].
+[*]Положите [B]SunEnchants.jar[/B] в папку [ICODE]plugins/[/ICODE].
+[*]Перезапустите сервер.
+[*]Настройте зачарования в [ICODE]plugins/SunEnchants/[/ICODE].
+[/LIST]
+
+[SIZE=6][B]Настройка[/B][/SIZE]
+Каждое зачарование лежит в отдельном файле в папке [ICODE]enchants/[/ICODE]. Пример:
+[CODE=yaml]
+enable: true
+type: potion_effect
+display_name: "&7Яд {level}"
+max_level: 3
+target:
+  - DIAMOND_SWORD
+  - NETHERITE_SWORD
+levels:
+  1:
+    chances:
+      table_enchant: 6
+      work: 12
+    effects:
+      - "POISON:0:60"
+[/CODE]
+
+[SIZE=6][B]Язык[/B][/SIZE]
+Внутриигровые сообщения и названия зачарований — на русском языке. Все тексты редактируются в конфигурации.
+
+[SIZE=6][B]Статистика[/B][/SIZE]
+Плагин использует bStats для сбора анонимной статистики. Отключить можно в [ICODE]plugins/bStats/config.yml[/ICODE].
+
+[CENTER][SIZE=5]Вопросы и предложения — в [URL=https://t.me/gloomdev]Telegram[/URL].[/SIZE][/CENTER]

@@ -29,7 +29,7 @@ public class RichEnchant extends SEnchant {
     @EventHandler
     public void onMobMoney(MobMoneyEvent event) {
         ItemStack itemStack = event.getItem();
-        if (!itemStack.hasItemMeta() || !isApplied(itemStack)) {
+        if (!isApplied(itemStack)) {
             return;
         }
 

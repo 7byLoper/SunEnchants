@@ -23,6 +23,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.utils.BulldozerUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "pinger")
 public class PingerEnchant extends SEnchant {
@@ -62,7 +63,7 @@ public class PingerEnchant extends SEnchant {
         if (BulldozerUtils.isProtectionCheck(event.getBlock())) {
             return;
         }
-        warnIfNeeded(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand(), 0);
+        warnIfNeeded(event.getPlayer(), HeldItemCache.mainHand(event.getPlayer()), 0);
     }
 
     @EventHandler

@@ -20,6 +20,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.AbstractLevel;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.utils.FarmUtils;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "sowing", level = EnchantLevelType.DOUBLE)
 public class SowingEnchant extends SEnchant {
@@ -38,9 +39,9 @@ public class SowingEnchant extends SEnchant {
     public void onCropsBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
+        ItemStack tool = HeldItemCache.mainHand(player);
 
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        if (!isApplied(tool)) {
             return;
         }
 

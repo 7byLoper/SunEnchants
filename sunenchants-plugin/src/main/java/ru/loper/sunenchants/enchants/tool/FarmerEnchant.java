@@ -13,6 +13,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.DoubleLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 
 @EnchantRegister(name = "farmer", level = EnchantLevelType.DOUBLE)
 public class FarmerEnchant extends SEnchant {
@@ -34,8 +35,8 @@ public class FarmerEnchant extends SEnchant {
             return;
         }
 
-        ItemStack tool = killer.getInventory().getItemInMainHand();
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        ItemStack tool = HeldItemCache.mainHand(killer);
+        if (!isApplied(tool)) {
             return;
         }
 

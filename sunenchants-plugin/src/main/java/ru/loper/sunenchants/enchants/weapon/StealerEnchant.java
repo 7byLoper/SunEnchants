@@ -20,6 +20,7 @@ import ru.loper.sunenchants.api.enchants.formatter.EnchantLevelFormatter;
 import ru.loper.sunenchants.api.enchants.formatter.EnchantTextFormatter;
 import ru.loper.sunenchants.api.enchants.levels.EnchantLevelType;
 import ru.loper.sunenchants.api.enchants.levels.impl.DoubleLevel;
+import ru.loper.sunenchants.utils.HeldItemCache;
 import ru.loper.sunenchants.utils.MessageUtils;
 
 @EnchantRegister(name = "stealer", level = EnchantLevelType.DOUBLE)
@@ -69,8 +70,8 @@ public class StealerEnchant extends SEnchant {
             return;
         }
 
-        ItemStack tool = damager.getInventory().getItemInMainHand();
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        ItemStack tool = HeldItemCache.mainHand(damager);
+        if (!isApplied(tool)) {
             return;
         }
 
@@ -95,8 +96,8 @@ public class StealerEnchant extends SEnchant {
             return;
         }
 
-        ItemStack tool = killer.getInventory().getItemInMainHand();
-        if (!tool.hasItemMeta() || !isApplied(tool)) {
+        ItemStack tool = HeldItemCache.mainHand(killer);
+        if (!isApplied(tool)) {
             return;
         }
 

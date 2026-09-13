@@ -93,7 +93,7 @@ public class ImpenetrableEnchant extends SEnchant {
 
         ItemStack[] armorContents = player.getInventory().getArmorContents();
         for (ItemStack item : armorContents) {
-            if (item != null && item.hasItemMeta() && isApplied(item)) {
+            if (item != null && isApplied(item)) {
                 IntLevel level = getLevel(item);
                 if (level != null) {
                     ImpenetrableData data =

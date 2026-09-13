@@ -129,6 +129,7 @@ public class AnvilListener implements Listener {
             modified = true;
         }
 
+        enchantManager.enforceCustomConflicts(resultMeta);
         if (modified) {
             enchantManager.updateBookEnchantLore(resultMeta);
         }
@@ -296,7 +297,9 @@ public class AnvilListener implements Listener {
     }
 
     private boolean isVanillaEnchantBlocked(ItemStack item, Enchantment enchantment) {
-        return limitsConfig.isDisabled(enchantment, item);
+        ItemMeta meta = item.getItemMeta();
+        return limitsConfig.isDisabled(enchantment, item)
+                || meta != null && enchantManager.hasCustomConflict(meta, enchantment);
     }
 
     private int mergeVanillaLevels(int firstLevel, int secondLevel, int maxLevel) {

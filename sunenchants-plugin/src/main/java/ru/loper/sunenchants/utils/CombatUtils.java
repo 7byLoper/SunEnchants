@@ -29,7 +29,7 @@ public class CombatUtils {
     @Nullable
     public static ItemStack resolveWeapon(Entity damager) {
         if (damager instanceof Player player) {
-            return player.getInventory().getItemInMainHand();
+            return HeldItemCache.mainHand(player);
         }
         if (damager instanceof Trident trident) {
             return trident.getItemStack();

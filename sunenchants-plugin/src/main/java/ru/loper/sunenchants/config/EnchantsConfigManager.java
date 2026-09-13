@@ -41,10 +41,6 @@ public class EnchantsConfigManager extends ConfigManager {
         return enchantConfigs.get(normalizeEnchantName(enchantName));
     }
 
-    /**
-     * Returns the exact runtime whitelist from enchants.yml.
-     * Missing IDs are intentionally treated as disabled and are never auto-added.
-     */
     public Set<String> getCatalogEnchantNames() {
         CustomConfig catalog = getCustomConfig("enchants.yml");
         if (catalog == null) {
@@ -85,7 +81,6 @@ public class EnchantsConfigManager extends ConfigManager {
             return normalizeEnchantNames(catalogConfig.getConfig().getStringList("enchants"));
         }
 
-        // Compatibility with the old monolithic configuration format.
         migrateLegacyConfig(catalogConfig);
         return catalogConfig.getConfig().getKeys(false).stream()
                 .filter(catalogConfig.getConfig()::isConfigurationSection)
