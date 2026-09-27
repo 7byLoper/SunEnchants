@@ -19,7 +19,7 @@ ext.versions = [
 
 allprojects {
     group = 'ru.loper.sunenchants'
-    version = '2.2.0-RELEASE'
+    version = '2.3.0-RELEASE'
 
     repositories {
         mavenLocal()

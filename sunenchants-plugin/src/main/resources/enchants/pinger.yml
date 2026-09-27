@@ -1,4 +1,5 @@
 enable: true
+type: pinger
 bootstrap:
   key: "sunenchants:pinger"
   description: "Пингер"

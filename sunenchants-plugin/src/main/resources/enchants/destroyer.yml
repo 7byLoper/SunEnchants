@@ -1,4 +1,5 @@
 enable: true
+type: destroyer
 bootstrap:
   key: "sunenchants:destroyer"
   description: "Разрушитель"

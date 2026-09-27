@@ -1,4 +1,5 @@
 enable: true
+type: indestructible
 bootstrap:
   key: "sunenchants:indestructible"
   description: "Неразрушимость"

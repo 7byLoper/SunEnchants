@@ -1,4 +1,5 @@
 enable: true
+type: wrecker
 bootstrap:
   key: "sunenchants:wrecker"
   description: "Крушитель"

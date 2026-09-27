@@ -1,4 +1,5 @@
 enable: true
+type: stealer
 bootstrap:
   key: "sunenchants:stealer"
   description: "Вор"

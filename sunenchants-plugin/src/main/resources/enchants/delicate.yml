@@ -1,4 +1,5 @@
 enable: true
+type: delicate
 bootstrap:
   key: "sunenchants:delicate"
   description: "Деликатный"

@@ -1,4 +1,5 @@
 enable: true
+type: jumper
 bootstrap:
   key: "sunenchants:jumper"
   description: "Попрыгун"

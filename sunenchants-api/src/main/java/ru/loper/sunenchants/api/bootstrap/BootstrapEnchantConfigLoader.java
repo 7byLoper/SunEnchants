@@ -184,6 +184,11 @@ public final class BootstrapEnchantConfigLoader {
         }
 
         String keyValue = requireString(bootstrap, "key");
+        String type = enchantSection.getString("type", configName);
+        Key configuredKey = Key.key(keyValue);
+        if (!configName.equals(type) && configuredKey.value().equals(type)) {
+            keyValue = configuredKey.namespace() + ":" + configName;
+        }
         String description = bootstrap.getString("description", configName);
         int maxLevel = bootstrap.getInt("max-level", 1);
         int weight = bootstrap.getInt("weight", 10);

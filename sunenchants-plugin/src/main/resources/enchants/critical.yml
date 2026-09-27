@@ -1,4 +1,5 @@
 enable: true
+type: critical
 bootstrap:
   key: "sunenchants:critical"
   description: "Критический"

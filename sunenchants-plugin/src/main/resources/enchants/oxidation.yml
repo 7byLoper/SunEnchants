@@ -1,4 +1,5 @@
 enable: true
+type: oxidation
 bootstrap:
   key: "sunenchants:oxidation"
   description: "Окисление"

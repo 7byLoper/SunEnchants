@@ -1,4 +1,5 @@
 enable: true
+type: demolition
 bootstrap:
   key: "sunenchants:demolition"
   description: "Подрывник"

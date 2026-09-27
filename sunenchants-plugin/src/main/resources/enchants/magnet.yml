@@ -1,4 +1,5 @@
 enable: true
+type: magnet
 _config_version: 2
 _migration_force:
   - bootstrap.description

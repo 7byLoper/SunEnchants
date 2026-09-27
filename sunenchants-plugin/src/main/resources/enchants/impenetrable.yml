@@ -1,4 +1,5 @@
 enable: true
+type: impenetrable
 bootstrap:
   key: "sunenchants:impenetrable"
   description: "Непробиваемый"

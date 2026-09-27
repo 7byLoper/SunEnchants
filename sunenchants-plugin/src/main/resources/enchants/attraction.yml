@@ -1,4 +1,5 @@
 enable: true
+type: attraction
 bootstrap:
   key: "sunenchants:attraction"
   description: "Притяжение"

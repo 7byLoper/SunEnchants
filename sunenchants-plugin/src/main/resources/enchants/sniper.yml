@@ -1,4 +1,5 @@
 enable: true
+type: sniper
 bootstrap:
   key: "sunenchants:sniper"
   description: "Снайпер"

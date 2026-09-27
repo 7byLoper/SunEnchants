@@ -1,4 +1,5 @@
 enable: true
+type: scout
 bootstrap:
   key: "sunenchants:scout"
   description: "Скаут"

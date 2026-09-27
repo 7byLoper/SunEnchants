@@ -33,7 +33,7 @@ import ru.loper.sunenchants.api.utils.EnchantUtils;
 public abstract class SEnchant implements Listener {
     private final NamespacedKey enchantKey;
     private final EnchantLevelType levelType;
-    private final String enchantName;
+    private String enchantName;
     private final EnchantTextFormatter textFormatter;
     private final EnchantLevelFormatter levelFormatter;
 
@@ -79,6 +79,10 @@ public abstract class SEnchant implements Listener {
             throw new IllegalStateException("Missing @EnchantRegister on " + type.getName());
         }
         return register;
+    }
+
+    public void setConfigName(@NotNull String configName) {
+        this.enchantName = configName;
     }
 
     public void registerListener(@NotNull Plugin plugin) {

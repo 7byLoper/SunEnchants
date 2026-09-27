@@ -93,52 +93,41 @@ public class EnchantsManager {
         enchants.clear();
         registeredEnchants.clear();
 
-        findAnnotatedClasses().stream()
-                .sorted(Comparator.comparing(Class::getName))
-                .forEach(enchantClass -> {
-                    try {
-                        EnchantRegister register = enchantClass.getAnnotation(EnchantRegister.class);
-                        if (register == null) {
-                            throw new IllegalStateException("Missing @EnchantRegister on " + enchantClass.getName());
-                        }
+        Map<String, Class<? extends SEnchant>> enchantTypes = findAnnotatedClasses().stream()
+                .collect(Collectors.toMap(clazz -> clazz.getAnnotation(EnchantRegister.class).name(), clazz -> clazz));
 
-                        String name = register.name();
-                        var config = enchantsConfig.getEnchantConfig(name);
-                        if (config == null || !config.getConfig().getBoolean("enable", true)) {
-                            logSkippedEnchant(name, config);
-                            return;
-                        }
-                        if (isConfigurablePotionEffect(config)) {
-                            return;
-                        }
+        enchantsConfig.getCatalogEnchantNames().forEach(name -> {
+            CustomConfig config = enchantsConfig.getEnchantConfig(name);
+            if (config == null || !config.getConfig().getBoolean("enable", true)) {
+                logSkippedEnchant(name, config);
+                return;
+            }
 
-                        NamespacedKey namespacedKey = resolveKey(name);
-                        SEnchant enchant = createEnchant(enchantClass, namespacedKey);
+            String type = config.getConfig().getString("type", name).trim().toLowerCase(Locale.ROOT);
+            if (isConfigurablePotionEffect(config)) {
+                registerConfigurableEnchant(name, config);
+                return;
+            }
 
-                        registerEnchant(enchant, config);
-                    } catch (Exception e) {
-                        plugin.getLogger()
-                                .log(Level.SEVERE, "Failed to register enchant: " + enchantClass.getName(), e);
-                    }
-                });
+            Class<? extends SEnchant> enchantClass = enchantTypes.get(type);
+            if (enchantClass == null) {
+                plugin.getLogger().warning("Unknown enchant type '" + type + "' for " + name);
+                return;
+            }
 
-        enchantsConfig.getCatalogEnchantNames().stream()
-                .filter(name -> !registeredEnchants.containsKey(name))
-                .forEach(this::registerConfigurableEnchant);
+            try {
+                SEnchant enchant = createEnchant(enchantClass, resolveKey(name));
+                enchant.setConfigName(name);
+                registerEnchant(enchant, config);
+            } catch (Exception e) {
+                plugin.getLogger().log(Level.SEVERE, "Failed to register enchant: " + name, e);
+            }
+        });
 
         revision++;
     }
 
-    private void registerConfigurableEnchant(String name) {
-        CustomConfig config = enchantsConfig.getEnchantConfig(name);
-        if (config == null || !config.getConfig().getBoolean("enable", true)) {
-            return;
-        }
-        if (!isConfigurablePotionEffect(config)) {
-            logSkippedEnchant(name, config);
-            return;
-        }
-
+    private void registerConfigurableEnchant(String name, CustomConfig config) {
         try {
             SEnchant enchant = new ConfigurablePotionEffectEnchant(resolveKey(name), textFormatter, levelFormatter, name);
             registerEnchant(enchant, config);

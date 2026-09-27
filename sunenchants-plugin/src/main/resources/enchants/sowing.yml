@@ -1,4 +1,5 @@
 enable: true
+type: sowing
 bootstrap:
   key: "sunenchants:sowing"
   description: "Посев"

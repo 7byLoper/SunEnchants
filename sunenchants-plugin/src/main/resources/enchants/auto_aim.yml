@@ -1,4 +1,5 @@
 enable: true
+type: auto_aim
 bootstrap:
   key: "sunenchants:auto_aim"
   description: "Самонаводка"

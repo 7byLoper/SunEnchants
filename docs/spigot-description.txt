@@ -29,7 +29,7 @@ SunEnchants добавляет на сервер 36 собственных за�
 [SIZE=6][B]Команды и права[/B][/SIZE]
 [LIST]
 [*][B]/senchants enchant <чар> <уровень>[/B] — наложить зачарование на предмет в руке [I](senchants.command.enchant)[/I]
-[*][B]/senchants givebook <чар> <уровень> [игрок][/B] — выдать зачарованную книгу [I](senchants.command.givebook)[/I]
+[*][B]/senchants givebook <игрок> <чар> <уровень>[/B] — выдать зачарованную книгу [I](senchants.command.givebook)[/I]
 [*][B]/senchants reload[/B] — перезагрузить конфигурацию [I](senchants.command.reload)[/I]
 [*][B]/setfilter[/B] — настроить фильтр для чара «Фильтр»
 [/LIST]
@@ -44,7 +44,7 @@ SunEnchants добавляет на сервер 36 собственных за�
 [/LIST]
 
 [SIZE=6][B]Настройка[/B][/SIZE]
-Каждое зачарование лежит в отдельном файле в папке [ICODE]enchants/[/ICODE]. Пример:
+Каждое зачарование лежит в отдельном файле в папке [ICODE]enchants/[/ICODE]. Имя файла — ID, а [ICODE]type[/ICODE] задаёт механику. Можно скопировать [ICODE]bulldozer.yml[/ICODE] в [ICODE]excavator.yml[/ICODE], оставить [ICODE]type: bulldozer[/ICODE], поменять название и параметры, затем добавить [ICODE]excavator[/ICODE] в [ICODE]enchants.yml[/ICODE]. Для нового чара нужен перезапуск сервера. Пример:
 [CODE=yaml]
 enable: true
 type: potion_effect

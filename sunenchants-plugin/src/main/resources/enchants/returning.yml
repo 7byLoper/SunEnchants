@@ -1,4 +1,5 @@
 enable: true
+type: returning
 bootstrap:
   key: "sunenchants:returning"
   description: "Возвращение"

@@ -1,4 +1,5 @@
 enable: true
+type: mega_bulldozer
 bootstrap:
   key: "sunenchants:mega_bulldozer"
   description: "Мега-Бур"

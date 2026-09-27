@@ -1,4 +1,5 @@
 enable: true
+type: fermer
 bootstrap:
   key: "sunenchants:fermer"
   description: "Фермер"

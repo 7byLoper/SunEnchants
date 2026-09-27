@@ -1,4 +1,5 @@
 enable: true
+type: rich
 bootstrap:
   key: "sunenchants:rich"
   description: "Богач"

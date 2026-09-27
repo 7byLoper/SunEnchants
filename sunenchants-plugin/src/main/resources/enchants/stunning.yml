@@ -1,4 +1,5 @@
 enable: true
+type: stunning
 bootstrap:
   key: "sunenchants:stunning"
   description: "Оглушение"

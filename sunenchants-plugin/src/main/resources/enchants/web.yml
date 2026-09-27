@@ -1,4 +1,5 @@
 enable: true
+type: web
 bootstrap:
   key: "sunenchants:web"
   description: "Паутина"

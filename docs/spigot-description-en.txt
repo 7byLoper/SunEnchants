@@ -1,0 +1,43 @@
+[CENTER][SIZE=7][B]SunEnchants[/B][/SIZE]
+[SIZE=4]36 custom enchantments for Paper and Spigot 1.16.5–1.21.x[/SIZE]
+[URL=https://github.com/7byLoper/SunEnchants]Source & releases[/URL] · [URL=https://t.me/gloomdev]Support[/URL][/CENTER]
+
+[SIZE=5][B]About[/B][/SIZE]
+SunEnchants adds enchantments for combat, mining, farming, armor, bows, and tridents. They fit into the usual enchanting flow: obtain them at the enchanting table, combine items in an anvil, and see them on your gear. One JAR supports both older and modern server versions.
+
+[SIZE=5][B]What you can configure[/B][/SIZE]
+[LIST]
+[*]36 included enchantments, each with its own YAML file.
+[*]Levels, activation and enchanting-table chances, applicable items, sounds, and effects.
+[*]Multiple variants of the same mechanic. Copy an enchant file, give it a new file name and display name, set [ICODE]type[/ICODE] to the mechanic you want, and add its ID to [ICODE]enchants.yml[/ICODE].
+[*]An allowlist of active enchants, enchantment limits, and editable messages.
+[*]PlaceholderAPI support and optional integrations with other Sun plugins.
+[/LIST]
+
+[SIZE=5][B]Requirements[/B][/SIZE]
+[LIST]
+[*]Paper or Spigot 1.16.5–1.21.x
+[*]Java 17+
+[*][B]SunCore is required.[/B]
+[/LIST]
+Optional integrations include PlaceholderAPI, WorldGuard, WorldEdit, SunGrindStone, SunMobMoney, SunHolyBossEvent, SunAutoMine, and AntiRelog.
+
+[SIZE=5][B]Installation[/B][/SIZE]
+[LIST=1]
+[*]Install SunCore.
+[*]Put [ICODE]SunEnchants.jar[/ICODE] in your server's [ICODE]plugins/[/ICODE] folder.
+[*]Restart the server, then edit the files in [ICODE]plugins/SunEnchants/[/ICODE].
+[/LIST]
+
+[SIZE=5][B]Create a variant[/B][/SIZE]
+Copy [ICODE]enchants/bulldozer.yml[/ICODE] to [ICODE]enchants/excavator.yml[/ICODE], keep [ICODE]type: bulldozer[/ICODE], and adjust the display name, levels, and block settings. Add [ICODE]excavator[/ICODE] to the list in [ICODE]enchants.yml[/ICODE]. Restart to register the new enchantment. On modern Paper, a copied default [ICODE]bootstrap.key[/ICODE] is adapted to the new ID automatically.
+
+[SIZE=5][B]Commands[/B][/SIZE]
+[LIST]
+[*][ICODE]/senchants enchant <enchant> <level>[/ICODE] — enchant the held item.
+[*][ICODE]/senchants givebook <player> <enchant> <level>[/ICODE] — give an enchanted book.
+[*][ICODE]/senchants reload[/ICODE] — reload configuration. New enchantments need a restart.
+[*][ICODE]/setfilter[/ICODE] — configure the Filter enchantment.
+[/LIST]
+
+In-game messages and default enchant names are in Russian and can be edited in the YAML files. For the full enchant list, configuration details, and downloads, see the [URL=https://github.com/7byLoper/SunEnchants]GitHub repository[/URL].

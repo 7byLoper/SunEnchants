@@ -1,4 +1,5 @@
 enable: true
+type: stupor
 bootstrap:
   key: "sunenchants:stupor"
   description: "Ступор"

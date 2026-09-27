@@ -1,4 +1,5 @@
 enable: true
+type: farmer
 bootstrap:
   key: "sunenchants:farmer"
   description: "Фармер"

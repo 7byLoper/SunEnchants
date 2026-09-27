@@ -1,4 +1,5 @@
 enable: true
+type: filter
 bootstrap:
   key: "sunenchants:filter"
   description: "Фильтр"

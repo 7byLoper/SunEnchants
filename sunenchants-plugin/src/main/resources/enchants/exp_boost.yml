@@ -1,4 +1,5 @@
 enable: true
+type: exp_boost
 _config_version: 2
 _migration_force:
   - target

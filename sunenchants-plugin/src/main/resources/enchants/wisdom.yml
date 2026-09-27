@@ -1,4 +1,5 @@
 enable: true
+type: wisdom
 bootstrap:
   key: "sunenchants:wisdom"
   description: "Мудрость"
